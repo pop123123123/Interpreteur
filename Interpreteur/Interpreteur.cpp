@@ -163,3 +163,16 @@ Noeud* Interpreteur::instRepeter() {
   return new NoeudInstRepeter(condition, sequence); // Et on renvoie un noeud Instruction instRepeter
 }
 
+Noeud* Interpreteur::instPour() {
+  //<instPour> ::= pour ( [<affectation>]; <expression>; [<affectation>] ) <seqInst> finpour
+  testerEtAvancer("pour");
+  testerEtAvancer("(");
+    
+    Noeud* condition = expression();
+    
+  testerEtAvancer(")");
+  Noeud* sequence = seqInst();     // On mémorise la séquence d'instruction
+  testerEtAvancer("finpour");
+  return nullptr; //new NoeudInstRepeter(condition, sequence); // Et on renvoie un noeud Instruction instRepeter
+}
+
