@@ -5,6 +5,18 @@
                    displayName="Header Files"
                    projectFiles="true">
     </logicalFolder>
+    <logicalFolder name="Interpreteur"
+                   displayName="Interpreteur"
+                   projectFiles="true">
+      <logicalFolder name="Interpreteur"
+                     displayName="Interpreteur"
+                     projectFiles="true">
+        <itemPath>Makefile</itemPath>
+        <itemPath>motsCles.txt</itemPath>
+        <itemPath>programme.txt</itemPath>
+      </logicalFolder>
+      <itemPath>../README.md</itemPath>
+    </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
                    projectFiles="true">
@@ -25,7 +37,23 @@
                    kind="IMPORTANT_FILES_FOLDER">
       <itemPath>Makefile</itemPath>
     </logicalFolder>
+    <itemPath>ArbreAbstrait.cpp</itemPath>
+    <itemPath>ArbreAbstrait.h</itemPath>
+    <itemPath>Exceptions.h</itemPath>
+    <itemPath>Interpreteur.cpp</itemPath>
+    <itemPath>Interpreteur.h</itemPath>
+    <itemPath>Lecteur.cpp</itemPath>
+    <itemPath>Lecteur.h</itemPath>
+    <itemPath>Symbole.cpp</itemPath>
+    <itemPath>Symbole.h</itemPath>
+    <itemPath>SymboleValue.cpp</itemPath>
+    <itemPath>SymboleValue.h</itemPath>
+    <itemPath>TableSymboles.cpp</itemPath>
+    <itemPath>TableSymboles.h</itemPath>
   </logicalFolder>
+  <sourceRootList>
+    <Elem>..</Elem>
+  </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
     <conf name="Debug" type="1">
@@ -36,7 +64,41 @@
       </toolsSet>
       <compileType>
       </compileType>
+      <item path="../README.md" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="ArbreAbstrait.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ArbreAbstrait.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Exceptions.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Interpreteur.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Interpreteur.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Lecteur.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Lecteur.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Makefile" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Symbole.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Symbole.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="SymboleValue.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="SymboleValue.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="TableSymboles.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="TableSymboles.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="motsCles.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="programme.txt" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="1">
@@ -59,7 +121,41 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="../README.md" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="ArbreAbstrait.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ArbreAbstrait.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Exceptions.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Interpreteur.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Interpreteur.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Lecteur.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Lecteur.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Makefile" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Symbole.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Symbole.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="SymboleValue.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="SymboleValue.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="TableSymboles.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="TableSymboles.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="motsCles.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="programme.txt" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>
