@@ -4,6 +4,13 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>ArbreAbstrait.h</itemPath>
+      <itemPath>Exceptions.h</itemPath>
+      <itemPath>Interpreteur.h</itemPath>
+      <itemPath>Lecteur.h</itemPath>
+      <itemPath>Symbole.h</itemPath>
+      <itemPath>SymboleValue.h</itemPath>
+      <itemPath>TableSymboles.h</itemPath>
     </logicalFolder>
     <logicalFolder name="Interpreteur"
                    displayName="Interpreteur"
@@ -24,6 +31,12 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>ArbreAbstrait.cpp</itemPath>
+      <itemPath>Interpreteur.cpp</itemPath>
+      <itemPath>Lecteur.cpp</itemPath>
+      <itemPath>Symbole.cpp</itemPath>
+      <itemPath>SymboleValue.cpp</itemPath>
+      <itemPath>TableSymboles.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -37,19 +50,6 @@
                    kind="IMPORTANT_FILES_FOLDER">
       <itemPath>Makefile</itemPath>
     </logicalFolder>
-    <itemPath>ArbreAbstrait.cpp</itemPath>
-    <itemPath>ArbreAbstrait.h</itemPath>
-    <itemPath>Exceptions.h</itemPath>
-    <itemPath>Interpreteur.cpp</itemPath>
-    <itemPath>Interpreteur.h</itemPath>
-    <itemPath>Lecteur.cpp</itemPath>
-    <itemPath>Lecteur.h</itemPath>
-    <itemPath>Symbole.cpp</itemPath>
-    <itemPath>Symbole.h</itemPath>
-    <itemPath>SymboleValue.cpp</itemPath>
-    <itemPath>SymboleValue.h</itemPath>
-    <itemPath>TableSymboles.cpp</itemPath>
-    <itemPath>TableSymboles.h</itemPath>
   </logicalFolder>
   <sourceRootList>
     <Elem>..</Elem>
@@ -63,6 +63,9 @@
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
       <compileType>
+        <ccTool>
+          <standard>8</standard>
+        </ccTool>
       </compileType>
       <item path="../README.md" ex="false" tool="3" flavor2="0">
       </item>
