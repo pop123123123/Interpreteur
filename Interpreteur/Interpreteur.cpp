@@ -1,6 +1,7 @@
 #include "Interpreteur.h"
 #include <stdlib.h>
 #include <iostream>
+#include <vector>
 using namespace std;
 
 Interpreteur::Interpreteur(ifstream & fichier) :
@@ -132,13 +133,43 @@ Noeud* Interpreteur::facteur() {
 
 Noeud* Interpreteur::instSi() {
   // <instSi> ::= si ( <expression> ) <seqInst> finsi
-  testerEtAvancer("si");
-  testerEtAvancer("(");
-  Noeud* condition = expression(); // On mémorise la condition
-  testerEtAvancer(")");
-  Noeud* sequence = seqInst();     // On mémorise la séquence d'instruction
-  testerEtAvancer("finsi");
-  return new NoeudInstSi(condition, sequence); // Et on renvoie un noeud Instruction Si
+    vector<Noeud*> *conditions = new vector<Noeud*>();
+    vector<Noeud*> *sequences = new vector<Noeud*>();
+    try{
+        testerEtAvancer("si");
+        testerEtAvancer("(");
+        Noeud* condition = expression(); // On mémorise la condition
+        conditions->push_back(condition);
+        testerEtAvancer(")");
+        Noeud* sequence = seqInst();     // On mémorise la séquence d'instruction
+        sequences->push_back(sequence);
+        bool elseif = true;
+        while(elseif){
+            try{
+                testerEtAvancer("sinonsi");
+                testerEtAvancer("(");
+                Noeud* condition = expression(); // On mémorise la condition
+                conditions->push_back(condition);
+                testerEtAvancer(")");
+                Noeud* sequence = seqInst();     // On mémorise la séquence d'instruction
+                sequences->push_back(sequence);
+            }catch(SyntaxeException e){
+                elseif = false;
+            }
+        }
+        try{
+            testerEtAvancer("sinon");
+            Noeud* sequence = seqInst();     // On mémorise la séquence d'instruction
+            sequences->push_back(sequence);
+        }catch(SyntaxeException e){
+            elseif = false;
+        }
+        testerEtAvancer("finsi");
+        return new NoeudInstSi(*conditions, *sequences); // Et on renvoie un noeud Instruction Si
+    }catch(SyntaxeException e){
+        delete conditions;
+        throw e;
+    }
 }
 
 Noeud* Interpreteur::instTantQue() {
