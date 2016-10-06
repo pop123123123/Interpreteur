@@ -107,3 +107,7 @@ int NoeudInstRepeter::executer() {
   }while (!m_condition->executer());
   return 0; // La valeur renvoyée ne représente rien !
 }
+
+NoeudInstRepeter::NoeudInstPour(declaration, condition, incrementation, sequence)
+: m_condition(condition), m_sequence(sequence) {
+}
