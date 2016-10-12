@@ -128,7 +128,9 @@ NoeudInstPour::NoeudInstPour(Noeud* declaration, Noeud* condition, Noeud* increm
 
 int NoeudInstPour::executer() {
   
-  for (m_declaration->executer();m_condition->executer();m_incrementation->executer()) m_sequence->executer();
+  for (m_declaration->executer();m_condition->executer();m_incrementation->executer()){
+      m_sequence->executer();
+  }
   return 0; // La valeur renvoyée ne représente rien !
 }
 

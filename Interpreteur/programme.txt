@@ -15,5 +15,9 @@ procedure principale()
   sinon
 	i=3;
   finsi
+    i = 10;
+        pour(m_pour=0;m_pour<10;m_pour=m_pour+1)
+        i=i+1;
+        finpour
 finproc
 # Commentaire Final
