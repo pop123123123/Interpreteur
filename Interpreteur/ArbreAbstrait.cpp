@@ -118,6 +118,17 @@ int NoeudInstRepeter::executer() {
   return 0; // La valeur renvoyée ne représente rien !
 }
 
-NoeudInstRepeter::NoeudInstPour(declaration, condition, incrementation, sequence)
-: m_condition(condition), m_sequence(sequence) {
+////////////////////////////////////////////////////////////////////////////////
+// NoeudInstPour
+////////////////////////////////////////////////////////////////////////////////
+
+NoeudInstPour::NoeudInstPour(Noeud* declaration, Noeud* condition, Noeud* incrementation, Noeud* sequence)
+: m_declaration(declaration), m_condition(condition), m_incrementation(incrementation), m_sequence(sequence) {
 }
+
+int NoeudInstPour::executer() {
+  
+  for (m_declaration->executer();m_condition->executer();m_incrementation->executer()) m_sequence->executer();
+  return 0; // La valeur renvoyée ne représente rien !
+}
+

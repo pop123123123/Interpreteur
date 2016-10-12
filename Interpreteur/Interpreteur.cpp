@@ -199,18 +199,15 @@ Noeud* Interpreteur::instPour() {
   testerEtAvancer("pour");
   testerEtAvancer("(");
     // Test affectation d'une variable => optionnel
-    if (m_lecteur.getSymbole() == "<VARIABLE>") {
-    Noeud *declaration = affectation();
-    testerEtAvancer(";");
-    return declaration;
-    }
+        NoeudAffectation* declaration = affectation();
+        testerEtAvancer(";");
+
     Noeud* condition = expression();
+    
     // Test incrémentation d'une variable => optionnel
-    if (m_lecteur.getSymbole() == "<VARIABLE>") {
-    Noeud *incrementation = affectation();
-    testerEtAvancer(";");
-    return incrementation;
-    }
+        Noeud* incrementation = affectation();
+        testerEtAvancer(";");
+        
   testerEtAvancer(")");
   Noeud* sequence = seqInst();     // On mémorise la séquence d'instruction
   testerEtAvancer("finpour");
