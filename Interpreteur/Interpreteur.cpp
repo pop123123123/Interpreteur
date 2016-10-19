@@ -248,6 +248,9 @@ Noeud* Interpreteur::instRepeter() {
 }
 
 Noeud* Interpreteur::instPour() {
+    // Test condition de boucle
+    Noeud* condition = expression();
+    testerEtAvancer(";");
     //<instPour> ::= pour ( [<affectation>]; <expression>; [<affectation>] ) <seqInst> finpour
     testerEtAvancer("pour");
     testerEtAvancer("(");
@@ -255,17 +258,6 @@ Noeud* Interpreteur::instPour() {
     Noeud* declaration = affectation();
     testerEtAvancer(";");
 
-    // Test condition de boucle
-    Noeud* condition = expression();
-    testerEtAvancer(";");
-
-    // Test incrémentation d'une variable
-    Noeud* incrementation = affectation();
-
-    testerEtAvancer(")");
-    Noeud* sequence = seqInst();     // On mémorise la séquence d'instruction
-    testerEtAvancer("finpour");
-    return new NoeudInstPour(declaration, condition, incrementation, sequence); // Et on renvoie un noeud Instruction instRepeter
 }
 
 Noeud* Interpreteur::instEcrire() {
