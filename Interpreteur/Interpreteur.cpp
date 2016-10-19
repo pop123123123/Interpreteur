@@ -182,6 +182,39 @@ Noeud* Interpreteur::chaine() {
   return m_table.chercheAjoute(a); // on ajoute la chaine
 }
 
+Noeud* Interpreteur::procedure() {
+//   <programme> ::= procedure <CHAINE> ([ <variable> ] { , <variable> }) <seqInst> finproc
+    testerEtAvancer("procedure");
+    Noeud * nom = chaine();
+    vector<Noeud*> *arguments = new vector<Noeud*>();
+    testerEtAvancer("si");
+    testerEtAvancer("(");
+    bool elseif = true;
+    try{
+        tester("<VARIABLE>");
+        Symbole a = m_lecteur.getSymbole();
+        arguments->push_back(m_table.chercheAjoute(a));
+    }catch(SyntaxeException e){
+        elseif = false;
+    }
+    try{
+        while(elseif){
+            try{
+                tester("<VARIABLE>");
+                Symbole a = m_lecteur.getSymbole();
+                arguments->push_back(m_table.chercheAjoute(a));
+            }catch(SyntaxeException e){
+                elseif = false;
+            }
+        }
+        Noeud* sequence = seqInst();
+        testerEtAvancer("finproc");
+        return new NoeudInstSi(*conditions, *sequences); // Et on renvoie un noeud Instruction Si
+    }catch(SyntaxeException e){
+        delete arguments;
+        throw e;
+    }
+}
 
 Noeud* Interpreteur::instSi() {
   // <instSi> ::= si ( <expression> ) <seqInst> finsi
@@ -258,6 +291,17 @@ Noeud* Interpreteur::instPour() {
     Noeud* declaration = affectation();
     testerEtAvancer(";");
 
+    // Test condition de boucle
+    Noeud* condition = expression();
+    testerEtAvancer(";");
+
+    // Test incrémentation d'une variable
+    Noeud* incrementation = affectation();
+
+    testerEtAvancer(")");
+    Noeud* sequence = seqInst();     // On mémorise la séquence d'instruction
+    testerEtAvancer("finpour");
+    return new NoeudInstPour(declaration, condition, incrementation, sequence); // Et on renvoie un noeud Instruction instRepeter
 }
 
 Noeud* Interpreteur::instEcrire() {

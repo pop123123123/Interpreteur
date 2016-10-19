@@ -34,7 +34,7 @@ private:
     Noeud*  facteur();     //     <facteur> ::= <entier>  |  <variable>  |  - <facteur>  | non <facteur> | ( <expression> )
     Noeud*  chaine();     //       <chaine> ::= <CHAINE>
                            //   <opBinaire> ::= + | - | *  | / | < | > | <= | >= | == | != | et | ou
-    Noeud*  procedure();   //   <programme> ::= procedure ([ <variable> ] { , <variable> }) <seqInst> finproc
+    Noeud*  procedure();   //   <programme> ::= procedure <CHAINE> ([ <variable> ] { , <variable> }) <seqInst> finproc
     Noeud*  instSi();      //      <instSi> ::= si ( <expression> ) <seqInst> { sinonsi ( <expression> ) <seqInst> } [ sinon <seqInst> ] finsi
     Noeud*  instTantQue(); // <instTantQue> ::= tantque ( <expression> ) <seqInst> fintantque
     Noeud*  instRepeter(); // <instRepeter> ::= repeter <seqInst> jusqua ( <expression> )
