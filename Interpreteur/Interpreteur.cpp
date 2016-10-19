@@ -40,6 +40,14 @@ void Interpreteur::erreur(const string & message) const throw (SyntaxeException)
   throw SyntaxeException(messageWhat);
 }
 
+void Interpreteur::avancerFinInstr() {
+    NoeudSeqInst* sequence = new NoeudSeqInst();
+    seqInst();
+    if (m_lecteur.getSymbole() == "finproc") throw SyntaxeException("Fin du programme - Des erreurs ont été trouvées.");
+    else
+        inst();
+}
+
 Noeud* Interpreteur::programme() {
   // <programme> ::= procedure principale() <seqInst> finproc FIN_FICHIER
   testerEtAvancer("procedure");
@@ -57,7 +65,8 @@ Noeud* Interpreteur::seqInst() {
   NoeudSeqInst* sequence = new NoeudSeqInst();
   do {
     sequence->ajoute(inst());
-  } while (m_lecteur.getSymbole() == "<VARIABLE>" || m_lecteur.getSymbole() == "si" || m_lecteur.getSymbole() == "tantque" || m_lecteur.getSymbole() == "repeter" || m_lecteur.getSymbole() == "ecrire");
+  } while (m_lecteur.getSymbole() == "<VARIABLE>" || m_lecteur.getSymbole() == "si" || m_lecteur.getSymbole() == "tantque"
+          || m_lecteur.getSymbole() == "pour" || m_lecteur.getSymbole() == "repeter" || m_lecteur.getSymbole() == "ecrire" || m_lecteur.getSymbole() == "lire");
   // Tant que le symbole courant est un début possible d'instruction...
   // Il faut compléter cette condition chaque fois qu'on rajoute une nouvelle instruction
   return sequence;
@@ -71,13 +80,47 @@ Noeud* Interpreteur::inst() {
     return affect;
   }
   else if (m_lecteur.getSymbole() == "si")
-    return instSi();
+      try{
+          return instSi();
+      } catch(SyntaxeException se){
+          cout << endl << "Erreur si" << endl;
+          avancerFinInstr();
+      }
   else if (m_lecteur.getSymbole() == "tantque")
-    return instTantQue();
+      try{
+          return instTantQue();
+      } catch(SyntaxeException se){
+          cout << endl << "Erreur tant que" << endl;
+          avancerFinInstr();
+      }
   else if (m_lecteur.getSymbole() == "repeter")
-    return instRepeter();
-  else if (m_lecteur.getSymbole() == "ecrire"){//cout << "mabite";
-    return instEcrire();}
+      try{
+          return instRepeter();
+      } catch(SyntaxeException se){
+          cout << endl << "Erreur repeter" << endl;
+          avancerFinInstr();
+      }
+  else if (m_lecteur.getSymbole() == "pour")
+      try{
+          return instPour();
+      } catch(SyntaxeException se){
+          cout << endl << "Erreur pour" << endl;
+          avancerFinInstr();
+      }
+  else if (m_lecteur.getSymbole() == "ecrire")
+      try{
+          return instEcrire();
+      } catch(SyntaxeException se){
+          cout << endl << "Erreur ecrire" << endl;
+          avancerFinInstr();
+      }
+  else if (m_lecteur.getSymbole()== "lire")
+      try{
+          return instLire();
+      } catch(SyntaxeException se){
+          cout << endl << "Erreur lire" << endl;
+          avancerFinInstr();
+      }
   // Compléter les alternatives chaque fois qu'on rajoute une nouvelle instruction
   else erreur("Instruction incorrecte");
 }
@@ -208,13 +251,21 @@ Noeud* Interpreteur::instPour() {
     //<instPour> ::= pour ( [<affectation>]; <expression>; [<affectation>] ) <seqInst> finpour
     testerEtAvancer("pour");
     testerEtAvancer("(");
+    // Test affectation d'une variable
+    Noeud* declaration = affectation();
+    testerEtAvancer(";");
 
+    // Test condition de boucle
     Noeud* condition = expression();
+    testerEtAvancer(";");
+
+    // Test incrémentation d'une variable
+    Noeud* incrementation = affectation();
 
     testerEtAvancer(")");
     Noeud* sequence = seqInst();     // On mémorise la séquence d'instruction
     testerEtAvancer("finpour");
-    return nullptr; //new NoeudInstRepeter(condition, sequence); // Et on renvoie un noeud Instruction instRepeter
+    return new NoeudInstPour(declaration, condition, incrementation, sequence); // Et on renvoie un noeud Instruction instRepeter
 }
 
 Noeud* Interpreteur::instEcrire() {
@@ -258,4 +309,27 @@ Noeud* Interpreteur::instEcrire() {
     return new NoeudInstEcrire(*aprint); // Et on renvoie un noeud Instruction instEcrire
 }
 
+Noeud* Interpreteur::instLire() {
+    //    <instLire> ::= lire ( <variable> { , <variable> } )
+    vector<Noeud*> *expressions = new vector<Noeud*>();
+    try {
+        testerEtAvancer("lire");
+        testerEtAvancer("(");
+        if(m_lecteur.getSymbole()=="<VARIABLE>")
+            expressions->push_back(m_table.chercheAjoute(m_lecteur.getSymbole()));
+        m_lecteur.avancer();
 
+        while(m_lecteur.getSymbole()== ","){
+            testerEtAvancer(",");
+            if(m_lecteur.getSymbole()=="<VARIABLE>")
+                expressions->push_back(m_table.chercheAjoute(m_lecteur.getSymbole()));
+            m_lecteur.avancer();
+        }
+        testerEtAvancer(")");
+        testerEtAvancer(";");
+    } catch (SyntaxeException se){
+        delete expressions;
+        throw se;
+    }
+    return new NoeudInstLire(*expressions);
+}

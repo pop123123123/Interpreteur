@@ -7,19 +7,30 @@ Symbole(s.getChaine()) {
   if (s == "<ENTIER>") {
     m_valeur = atoi(s.getChaine().c_str()); // c_str convertit une string en char*
     m_defini = true;
-  } else {
+  }else if(s == "<CHAINE>"){
+      m_defini = true;
+      m_valeur = 1;
+  }else{
     m_defini = false;
   }
 }
 
 int SymboleValue::executer() {
   if (!m_defini) throw IndefiniException(); // on lève une exception si valeur non définie
-  return m_valeur;
+  /*if(Symbole::operator ==("<CHAINE>"))
+      return Symbole::getChaine();
+  else*/
+    return m_valeur;
 }
 
 ostream & operator<<(ostream & cout, const SymboleValue & symbole) {
   cout << (Symbole) symbole << "\t\t - Valeur=";
-  if (symbole.m_defini) cout << symbole.m_valeur << " ";
+  if (symbole.m_defini) cout << symbole.m_valeur << " " << symbole.getChaine();
   else cout << "indefinie ";
   return cout;
+}
+
+void SymboleValue::traduitEnPython(ostream& cout, unsigned int indentation) const {
+    cout << string(indentation*3,' ');
+    cout << Symbole::getChaine();
 }

@@ -3,6 +3,8 @@
 #include "Symbole.h"
 #include "SymboleValue.h"
 #include "Exceptions.h"
+#include <typeinfo>
+#include <iomanip>
 
 ////////////////////////////////////////////////////////////////////////////////
 // NoeudSeqInst
@@ -21,6 +23,13 @@ void NoeudSeqInst::ajoute(Noeud* instruction) {
   if (instruction!=nullptr) m_instructions.push_back(instruction);
 }
 
+void NoeudSeqInst::traduitEnPython(ostream& cout, unsigned int indentation) const {
+    for(int i = 0; i < m_instructions.size(); i++){
+        m_instructions[i]->traduitEnPython(cout,indentation);
+        cout << endl;
+    }
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // NoeudAffectation
 ////////////////////////////////////////////////////////////////////////////////
@@ -33,6 +42,13 @@ int NoeudAffectation::executer() {
   int valeur = m_expression->executer(); // On exécute (évalue) l'expression
   ((SymboleValue*) m_variable)->setValeur(valeur); // On affecte la variable
   return 0; // La valeur renvoyée ne représente rien !
+}
+
+void NoeudAffectation::traduitEnPython(ostream& cout, unsigned int indentation) const {
+    cout << string(indentation*3,' ');
+    cout << dynamic_cast<Symbole*>(this->m_variable)->getChaine() << " = ";
+    this->m_expression->traduitEnPython(cout,0);
+    //cout << endl;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -67,6 +83,15 @@ int NoeudOperateurBinaire::executer() {
   return valeur; // On retourne la valeur calculée
 }
 
+void NoeudOperateurBinaire::traduitEnPython(ostream& cout, unsigned int indentation) const {
+    cout << string(indentation*3,' ');
+    this->m_operandeGauche->traduitEnPython(cout,0);
+    cout << " ";
+    cout << this->m_operateur.getChaine();
+    cout << " ";
+    this->m_operandeDroit->traduitEnPython(cout,0);
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // NoeudInstSi
 ////////////////////////////////////////////////////////////////////////////////
@@ -90,6 +115,28 @@ int NoeudInstSi::executer() {
   return 0; // La valeur renvoyée ne représente rien !
 }
 
+void NoeudInstSi::traduitEnPython(ostream& cout, unsigned int indentation) const {
+    cout << string(indentation*3,' ');
+    cout << "if ";
+    this->m_condition[0]->traduitEnPython(cout,0);
+    cout << " :" << endl;
+    this->m_sequence[0]->traduitEnPython(cout,indentation+1);
+    
+    for(int i = 1; i<this->m_condition.size() ; i++){
+        cout << string(indentation*3,' ');
+        cout << "elif ";
+        this->m_condition[i]->traduitEnPython(cout,0);
+        cout << " :" << endl;
+        this->m_sequence[i]->traduitEnPython(cout,indentation+1);
+    }
+    
+    if(m_sequence.size()!=m_condition.size()){
+        cout << string(indentation*3,' ');
+        cout << "else :" << endl;
+        this->m_sequence[m_sequence.size()-1]->traduitEnPython(cout,indentation+1);
+    }
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // NoeudInstTantQue
 ////////////////////////////////////////////////////////////////////////////////
@@ -101,6 +148,16 @@ NoeudInstTantQue::NoeudInstTantQue(Noeud* condition, Noeud* sequence)
 int NoeudInstTantQue::executer() {
   while (m_condition->executer()) m_sequence->executer();
   return 0; // La valeur renvoyée ne représente rien !
+}
+
+void NoeudInstTantQue::traduitEnPython(ostream& cout, unsigned int indentation) const {
+
+    cout << string(indentation*3,' ');
+    cout << "while ";
+    this->m_condition->traduitEnPython(cout,0);
+    cout << " :" << endl;
+    this->m_sequence->traduitEnPython(cout,indentation+1);
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -116,4 +173,93 @@ int NoeudInstRepeter::executer() {
       m_sequence->executer(); 
   }while (!m_condition->executer());
   return 0; // La valeur renvoyée ne représente rien !
+}
+
+void NoeudInstRepeter::traduitEnPython(ostream& cout, unsigned int indentation) const {
+
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// NoeudInstPour
+////////////////////////////////////////////////////////////////////////////////
+
+NoeudInstPour::NoeudInstPour(Noeud* declaration, Noeud* condition, Noeud* incrementation, Noeud* sequence)
+: m_declaration(declaration), m_condition(condition), m_incrementation(incrementation), m_sequence(sequence) {
+}
+
+int NoeudInstPour::executer() {
+  
+  for (m_declaration->executer();m_condition->executer();m_incrementation->executer()){
+      m_sequence->executer();
+  }
+  return 0; // La valeur renvoyée ne représente rien !
+}
+
+void NoeudInstPour::traduitEnPython(ostream& cout, unsigned int indentation) const {
+    cout << string(indentation*3,' ');
+    this->m_declaration->traduitEnPython(cout,0);
+    cout << endl << string(indentation*3,' ');
+    cout << "while ";
+    this->m_condition->traduitEnPython(cout,0);
+    cout << " :" << endl;
+    this->m_sequence->traduitEnPython(cout,indentation+1);
+    this->m_incrementation->traduitEnPython(cout,indentation + 1);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// NoeudInstEcrire
+////////////////////////////////////////////////////////////////////////////////
+
+NoeudInstEcrire::NoeudInstEcrire(vector<Noeud*> expressions)
+: m_expressions(expressions) {
+    
+}
+
+int NoeudInstEcrire::executer() {
+    Noeud* it = nullptr;
+    for (int i = 0 ; i < m_expressions.size() ; i++){
+        it = m_expressions[i];
+        if ( typeid(*it)==typeid(SymboleValue) && *((SymboleValue*)it)== "<CHAINE>"){
+            SymboleValue* a = dynamic_cast<SymboleValue*>(it);
+            string s = a->getChaine();
+            cout << s.substr(1,s.size()-2);
+        }else
+            cout << it->executer();
+    }
+  return 0; // La valeur renvoyée ne représente rien !
+}
+
+void NoeudInstEcrire::traduitEnPython(ostream& cout, unsigned int indentation) const {
+    cout << string(indentation*3,' ');
+    cout << "print(";
+    for (int i = 0 ; i < m_expressions.size() ; i++){
+        m_expressions[i]->traduitEnPython(cout,0);
+        if(i+1<m_expressions.size())
+            cout<<" , ";
+    }
+    cout << ")" << endl;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// NoeudInstLire
+////////////////////////////////////////////////////////////////////////////////
+
+NoeudInstLire::NoeudInstLire(vector<Noeud*> expressions) : m_expressions(expressions) {
+}
+
+int NoeudInstLire::executer() {
+    for(int i=0; i < m_expressions.size(); i++){
+        int a;
+        cout << ((SymboleValue*)m_expressions[i])->getChaine() << " = ";
+        cin >>  a;
+        ((SymboleValue*) m_expressions[i])->setValeur(a);
+    }
+}
+
+void NoeudInstLire::traduitEnPython(ostream& cout, unsigned int indentation) const {
+    for (int i = 0 ; i < m_expressions.size() ; i++){
+        m_expressions[i]->traduitEnPython(cout,indentation);
+        cout << string(indentation*3,' ');
+        cout << " = input()" << endl;
+    }
 }

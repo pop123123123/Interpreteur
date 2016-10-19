@@ -1,19 +1,10 @@
 # Fichier de test
 # Les lignes de commentaires commencent par #
 procedure principale()
-  i = 4;
-  si (i==0)
-	i=10;
-  sinonsi(i==1)
-	i=11;
-  sinonsi(i==2)
-	i=12;
-  sinonsi(i==3)
-	i=13;
-  sinonsi(i==4)
-	i=14;
-  sinon
-	i=3;
-  finsi
+	i=30;
+	pour(m_pour = 0;m_pour<10;m_pour = m_pour + 1)
+		i = i + 7;	
+	finpour
+	ecrire(i);
 finproc
 # Commentaire Final

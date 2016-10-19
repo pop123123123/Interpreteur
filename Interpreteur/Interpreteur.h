@@ -32,16 +32,21 @@ private:
     Noeud*  affectation(); // <affectation> ::= <variable> = <expression> 
     Noeud*  expression();  //  <expression> ::= <facteur> { <opBinaire> <facteur> }
     Noeud*  facteur();     //     <facteur> ::= <entier>  |  <variable>  |  - <facteur>  | non <facteur> | ( <expression> )
+    Noeud*  chaine();     //       <chaine> ::= <CHAINE>
                            //   <opBinaire> ::= + | - | *  | / | < | > | <= | >= | == | != | et | ou
+    Noeud*  procedure();   //   <programme> ::= procedure ([ <variable> ] { , <variable> }) <seqInst> finproc
     Noeud*  instSi();      //      <instSi> ::= si ( <expression> ) <seqInst> { sinonsi ( <expression> ) <seqInst> } [ sinon <seqInst> ] finsi
     Noeud*  instTantQue(); // <instTantQue> ::= tantque ( <expression> ) <seqInst> fintantque
     Noeud*  instRepeter(); // <instRepeter> ::= repeter <seqInst> jusqua ( <expression> )
     Noeud*  instPour();    //    <instPour> ::= pour ( [<affectation>]; <expression>; [<affectation>] ) <seqInst> finpour
+    Noeud*  instEcrire();  //  <instEcrire> ::= ecrire ( <expression> | <chaine> { , <expression> | <chaine> } )
+    Noeud*  instLire();     //    <instLire> ::= lire ( <variable> { , <variable> } )
 
     // outils pour simplifier l'analyse syntaxique
     void tester (const string & symboleAttendu) const throw (SyntaxeException);   // Si symbole courant != symboleAttendu, on lève une exception
     void testerEtAvancer(const string & symboleAttendu) throw (SyntaxeException); // Si symbole courant != symboleAttendu, on lève une exception, sinon on avance
     void erreur (const string & mess) const throw (SyntaxeException);             // Lève une exception "contenant" le message mess
+    void avancerFinInstr(); // avancer jusqu'au début de l'instruction suivante
 };
 
 #endif /* INTERPRETEUR_H */
