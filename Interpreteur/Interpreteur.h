@@ -5,6 +5,7 @@
 #include "Lecteur.h"
 #include "Exceptions.h"
 #include "TableSymboles.h"
+#include "TableProcedures.h"
 #include "ArbreAbstrait.h"
 
 class Interpreteur {
@@ -19,20 +20,29 @@ public:
 
 	inline const TableSymboles & getTable () const  { return m_table;    } // accesseur	
 	inline Noeud* getArbre () const { return m_arbre; }                    // accesseur
+	inline int getNbErreurs () const { return m_erreurs; }                    // accesseur
 	
 private:
     Lecteur        m_lecteur;  // Le lecteur de symboles utilisé pour analyser le fichier
     TableSymboles  m_table;    // La table des symboles valués
     Noeud*         m_arbre;    // L'arbre abstrait
-
+    TableProcedures m_proc;    // La table des procédures
+    int            m_erreurs;  // Nombre d'erreurs
     // Implémentation de la grammaire
     Noeud*  programme();   //   <programme> ::= procedure principale() <seqInst> finproc FIN_FICHIER
     Noeud*  seqInst();	   //     <seqInst> ::= <inst> { <inst> }
-    Noeud*  inst();	       //        <inst> ::= <affectation> ; | <instSi>
+    Noeud*  inst();	   //        <inst> ::= <affectation> ; | <instSi>
     Noeud*  affectation(); // <affectation> ::= <variable> = <expression> 
-    Noeud*  expression();  //  <expression> ::= <facteur> { <opBinaire> <facteur> }
-    Noeud*  facteur();     //     <facteur> ::= <entier>  |  <variable>  |  - <facteur>  | non <facteur> | ( <expression> )
-    Noeud*  chaine();     //       <chaine> ::= <CHAINE>
+    
+    Noeud*  expression();  //  <expression> ::= <terme> { + <terme> | - <terme> }
+    Noeud*  terme();       //       <terme> ::= <facteur> { * <facteur> | / <facteur> }
+    Noeud*  facteur();     //     <facteur> ::= <entier>  |  <variable>  |  - <facteur>  | non <facteur> | | <facteur> | | ( <expression> )
+    Noeud*  expBool();     //     <expBool> ::= <relationET> { ou <relationEt> }
+    Noeud*  relationEt();  //  <relationET> ::= <relation> { et <relation> }
+    Noeud*  relation();    //    <relation> ::= <expression> { <opRel> <expression> }
+                           //       <opRel> ::= == | != | < | <= | > | >=
+
+    Noeud*  chaine();      //      <chaine> ::= <CHAINE>
                            //   <opBinaire> ::= + | - | *  | / | < | > | <= | >= | == | != | et | ou
     Noeud*  procedure();   //   <programme> ::= procedure <CHAINE> ([ <variable> ] { , <variable> }) <seqInst> finproc
     Noeud*  instSi();      //      <instSi> ::= si ( <expression> ) <seqInst> { sinonsi ( <expression> ) <seqInst> } [ sinon <seqInst> ] finsi
@@ -40,7 +50,8 @@ private:
     Noeud*  instRepeter(); // <instRepeter> ::= repeter <seqInst> jusqua ( <expression> )
     Noeud*  instPour();    //    <instPour> ::= pour ( [<affectation>]; <expression>; [<affectation>] ) <seqInst> finpour
     Noeud*  instEcrire();  //  <instEcrire> ::= ecrire ( <expression> | <chaine> { , <expression> | <chaine> } )
-    Noeud*  instLire();     //    <instLire> ::= lire ( <variable> { , <variable> } )
+    Noeud*  instLire();    //    <instLire> ::= lire ( <variable> { , <variable> } )
+    Noeud*  instAbs();     //     <instAbs> ::= | <expression> |
 
     // outils pour simplifier l'analyse syntaxique
     void tester (const string & symboleAttendu) const throw (SyntaxeException);   // Si symbole courant != symboleAttendu, on lève une exception

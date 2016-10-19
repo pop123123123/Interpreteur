@@ -21,7 +21,7 @@ FC=gfortran
 AS=as
 
 # Macros
-CND_PLATFORM=GNU-Linux
+CND_PLATFORM=GNU-Linux-x86
 CND_DLIB_EXT=so
 CND_CONF=Release
 CND_DISTDIR=dist
@@ -38,8 +38,10 @@ OBJECTFILES= \
 	${OBJECTDIR}/ArbreAbstrait.o \
 	${OBJECTDIR}/Interpreteur.o \
 	${OBJECTDIR}/Lecteur.o \
+	${OBJECTDIR}/Procedure.o \
 	${OBJECTDIR}/Symbole.o \
 	${OBJECTDIR}/SymboleValue.o \
+	${OBJECTDIR}/TableProcedures.o \
 	${OBJECTDIR}/TableSymboles.o \
 	${OBJECTDIR}/main.o
 
@@ -83,6 +85,11 @@ ${OBJECTDIR}/Lecteur.o: Lecteur.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Lecteur.o Lecteur.cpp
 
+${OBJECTDIR}/Procedure.o: Procedure.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Procedure.o Procedure.cpp
+
 ${OBJECTDIR}/Symbole.o: Symbole.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
@@ -92,6 +99,11 @@ ${OBJECTDIR}/SymboleValue.o: SymboleValue.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/SymboleValue.o SymboleValue.cpp
+
+${OBJECTDIR}/TableProcedures.o: TableProcedures.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/TableProcedures.o TableProcedures.cpp
 
 ${OBJECTDIR}/TableSymboles.o: TableSymboles.cpp 
 	${MKDIR} -p ${OBJECTDIR}

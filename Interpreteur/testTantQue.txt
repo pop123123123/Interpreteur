@@ -1,0 +1,11 @@
+# Fichier de test Tant que
+# Les lignes de commentaires commencent par #
+procedure principale()
+  i = 12+3;
+  j=1;
+  tantque (i>10)
+    j=1+j;
+    i = i-1;
+  fintantque
+finproc
+# Commentaire Final

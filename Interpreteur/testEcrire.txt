@@ -1,0 +1,9 @@
+# Fichier de test de fonction ecrire
+# Les lignes de commentaires commencent par #
+procedure principale()
+  i = 0;
+  a = 7;
+  ecrire("Bonjour",j+1);
+  ecrire(7,a);
+finproc
+# Commentaire Final

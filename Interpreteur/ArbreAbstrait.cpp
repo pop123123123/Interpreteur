@@ -48,7 +48,6 @@ void NoeudAffectation::traduitEnPython(ostream& cout, unsigned int indentation) 
     cout << string(indentation*3,' ');
     cout << dynamic_cast<Symbole*>(this->m_variable)->getChaine() << " = ";
     this->m_expression->traduitEnPython(cout,0);
-    //cout << endl;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -176,7 +175,10 @@ int NoeudInstRepeter::executer() {
 }
 
 void NoeudInstRepeter::traduitEnPython(ostream& cout, unsigned int indentation) const {
-
+    cout << string(indentation*3,' ') << "while not(";
+    this->m_condition->traduitEnPython(cout,0);
+    cout << "):" << endl;
+    this->m_sequence->traduitEnPython(cout,indentation+1);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -237,7 +239,7 @@ void NoeudInstEcrire::traduitEnPython(ostream& cout, unsigned int indentation) c
         if(i+1<m_expressions.size())
             cout<<" , ";
     }
-    cout << ")" << endl;
+    cout << ")";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -260,6 +262,32 @@ void NoeudInstLire::traduitEnPython(ostream& cout, unsigned int indentation) con
     for (int i = 0 ; i < m_expressions.size() ; i++){
         m_expressions[i]->traduitEnPython(cout,indentation);
         cout << string(indentation*3,' ');
-        cout << " = input()" << endl;
+        cout << " = input()";
     }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// NoeudInstAbs
+////////////////////////////////////////////////////////////////////////////////
+
+NoeudInstAbs::NoeudInstAbs(Noeud* var) : m_variable(var){
+}
+
+
+int NoeudInstAbs::executer() {
+    int a = this->m_variable->executer();
+    try{
+        if(a < 0)
+            return -a;
+        else
+            return a;
+    }catch(exception e){
+        return a;
+    }
+}
+
+void NoeudInstAbs::traduitEnPython(ostream& cout, unsigned int indentation) const {
+    cout << string(indentation*3,' ') << "abs(" ;
+    this->m_variable->traduitEnPython(cout,0);
+    cout << ")" ;
 }

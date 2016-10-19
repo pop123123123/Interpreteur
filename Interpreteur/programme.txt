@@ -3,8 +3,9 @@
 procedure principale()
 	i=30;
 	pour(m_pour = 0;m_pour<10;m_pour = m_pour + 1)
-		i = i + 7;	
+		i = i + 3 * 2 * 2 + 1;	
 	finpour
 	ecrire("i = ",i);
+	ecrire(|-2|*|4|);
 finproc
 # Commentaire Final

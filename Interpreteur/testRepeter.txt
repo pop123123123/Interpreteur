@@ -1,0 +1,10 @@
+# Fichier de test de l'instruction repeter
+# Les lignes de commentaires commencent par #
+procedure principale()
+  i = 12;
+  repeter
+    i= i-1;
+  jusqua (i < 1)
+  ecrire(i);
+finproc
+# Commentaire Final

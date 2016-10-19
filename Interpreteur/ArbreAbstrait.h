@@ -162,4 +162,14 @@ class NoeudInstLire : public Noeud {
         vector<Noeud*> m_expressions;
 };
 
+class NoeudInstAbs : public Noeud {
+    public:
+        NoeudInstAbs(Noeud* var);
+        ~NoeudInstAbs() {};
+        int executer();
+        void traduitEnPython(ostream& cout, unsigned int indentation) const override;
+
+    private:
+        Noeud* m_variable;
+};
 #endif /* ARBREABSTRAIT_H */
