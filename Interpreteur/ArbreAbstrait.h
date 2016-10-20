@@ -176,7 +176,7 @@ class NoeudInstAbs : public Noeud {
         Noeud* m_variable;
 };
 
-  /*   
+    
 ////////////////////////////////////////////////////////////////////////////////
 class NoeudInstProc : public Noeud {
     public:
@@ -189,6 +189,6 @@ class NoeudInstProc : public Noeud {
         Procedure* m_proc;
         vector<Noeud*>* m_args;
 };
-*/
+
 
 #endif /* ARBREABSTRAIT_H */

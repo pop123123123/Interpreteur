@@ -45,7 +45,7 @@ private:
     Noeud*  chaine();      //      <chaine> ::= <CHAINE>
                            //   <opBinaire> ::= + | - | *  | / | < | > | <= | >= | == | != | et | ou
     void    procedureDefinition();  //   <programme> ::= procedure <mot> ([ <variable> ] { , <variable> }) <seqInst> finproc
-    Noeud*  procedureCall();  //   <programme> ::= appel <mot> ([ <variable> ] { , <variable> })
+    Noeud*  instProcedure();  //   <programme> ::= appel <mot> ([ <variable> ] { , <variable> })
     Noeud*  instSi();      //      <instSi> ::= si ( <expression> ) <seqInst> { sinonsi ( <expression> ) <seqInst> } [ sinon <seqInst> ] finsi
     Noeud*  instTantQue(); // <instTantQue> ::= tantque ( <expression> ) <seqInst> fintantque
     Noeud*  instRepeter(); // <instRepeter> ::= repeter <seqInst> jusqua ( <expression> )

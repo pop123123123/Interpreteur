@@ -1,0 +1,23 @@
+# Fichier de test de fonction ecrire
+# Les lignes de commentaires commencent par #
+
+procedure afficheMax(a,b)
+    si(a<b)
+        ecrire(b);
+    sinon
+        ecrire(a);
+    finsi
+finproc
+
+procedure afficheTest()
+    a = 2;
+    a = a * 2;
+    ecrire(a);
+finproc
+
+procedure principale()
+  appel afficheMax(5,7);
+  appel afficheTest();
+  appel afficheTest();
+finproc
+# Commentaire Final

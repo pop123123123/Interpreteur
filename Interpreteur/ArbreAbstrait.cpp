@@ -307,19 +307,25 @@ void NoeudInstAbs::traduitEnPython(ostream& cout, unsigned int indentation) cons
 ////////////////////////////////////////////////////////////////////////////////
 // NoeudInstProc
 ////////////////////////////////////////////////////////////////////////////////
-/*
+
 NoeudInstProc::NoeudInstProc(Procedure* proc, vector<Noeud*>* args) : m_proc(proc), m_args(args){
 
 }
 
 
 int NoeudInstProc::executer() {
-
-    
+    return this->m_proc->execute(this->m_args);
 }
 
 void NoeudInstProc::traduitEnPython(ostream& cout, unsigned int indentation) const {
-
+    cout << string(indentation*3,' ') << "def " << this->m_proc->getName() << "(" ;
+    vector<SymboleValue*>* arguments = this->m_proc->getArgs();
+    for (int i = 0 ; i < arguments->size() ; i ++){
+        cout << (*arguments)[i]->getChaine() ;
+        if(i + 1 < arguments->size())
+            cout << ", ";
+    }
+    cout << "):" << endl;
+    this->m_proc->getSequence()->traduitEnPython(cout,indentation + 1);
     
 }
-*/

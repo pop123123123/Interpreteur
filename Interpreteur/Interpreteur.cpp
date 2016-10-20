@@ -9,14 +9,14 @@ m_lecteur(fichier), m_arbre(nullptr),m_proc(),m_erreurs(0) {
 }
 
 void Interpreteur::analyse() {
-    /*bool proc_def = true;
+    bool proc_def = true;
     while (proc_def){
         try{
             procedureDefinition();
-        }catch(SyntaxeException s){
+        }catch(ProcedureException s){
             proc_def = false;
         }        
-    }*/
+    }
     this->m_table = new TableSymboles;
     m_arbre = programme(); // on lance l'analyse de la première règle
 }
@@ -50,11 +50,6 @@ void Interpreteur::erreur(const string & message) const throw (SyntaxeException)
 }
 
 void Interpreteur::avancerFinInstr() {
-    /*NoeudSeqInst* sequence = new NoeudSeqInst();
-    seqInst();
-    if (m_lecteur.getSymbole() == "finproc") throw SyntaxeException("Fin du programme - Des erreurs ont été trouvées.");
-    else
-        inst();*/
     while (m_lecteur.getSymbole() == "<VARIABLE>" && m_lecteur.getSymbole() == "si" && m_lecteur.getSymbole() == "tantque"
           && m_lecteur.getSymbole() == "pour" && m_lecteur.getSymbole() == "repeter" && m_lecteur.getSymbole() == "ecrire"
           && m_lecteur.getSymbole() == "lire" && m_lecteur.getSymbole() == "|" && m_lecteur.getSymbole() != "<FINDEFICHIER>")
@@ -65,7 +60,7 @@ void Interpreteur::avancerFinInstr() {
 Noeud* Interpreteur::programme() {
     // <programme> ::= procedure principale() <seqInst> finproc FIN_FICHIER
     try {
-        testerEtAvancer("procedure");
+        //-testerEtAvancer("procedure");
         testerEtAvancer("principale");
         testerEtAvancer("(");
         testerEtAvancer(")");
@@ -113,9 +108,7 @@ Noeud* Interpreteur::inst() {
         else if (m_lecteur.getSymbole() == "lire")
             return instLire();
         else if (m_lecteur.getSymbole() == "appel")
-            return instLire();
-        else if (m_lecteur.getSymbole() == "proc")
-            return instLire();
+            return instProcedure();
             // Compléter les alternatives chaque fois qu'on rajoute une nouvelle instruction
         else erreur("Instruction incorrecte");
     } catch (SyntaxeException & se) {
@@ -237,26 +230,29 @@ void Interpreteur::procedureDefinition() {
     try{
         testerEtAvancer("procedure");
     }catch (SyntaxeException & se) {
-        throw new ProcedureException;
+        throw ProcedureException();
     }
     try{
         try{
-            tester("<INDEFINI>");
+            cout << m_lecteur.getSymbole() << endl;
+            tester("<VARIABLE>");
         }catch(SyntaxeException & se){
-            throw new SyntaxeException("mot clé déjà défini dans le langage");
+            tester("principale");
+            throw ProcedureException("mot clé déjà défini dans le langage");
         }
         string nom = m_lecteur.getSymbole().getChaine();
+        this->m_lecteur.avancer();
         testerEtAvancer("(");
         vector<SymboleValue*> *arguments = new vector<SymboleValue*>;
         this->m_table = new TableSymboles;
         
         // Définition des arguments
         // -----------------------------------------------
-        
         bool args = true;
         try{
             tester("<VARIABLE>");
             Symbole a = m_lecteur.getSymbole();
+            m_lecteur.avancer();
             arguments->push_back(m_table->chercheAjoute(a));
         }catch(SyntaxeException e){
             args = false;
@@ -264,13 +260,16 @@ void Interpreteur::procedureDefinition() {
         try{
             while(args){
                 try{
+                    this->testerEtAvancer(",");
                     tester("<VARIABLE>");
                     Symbole a = m_lecteur.getSymbole();
+                    m_lecteur.avancer();
                     arguments->push_back(m_table->chercheAjoute(a));
                 }catch(SyntaxeException e){
                     args = false;
                 }
             }
+        testerEtAvancer(")");
 
             // Définition du corps de la procédure
             // -----------------------------------------------
@@ -290,10 +289,11 @@ void Interpreteur::procedureDefinition() {
     }
 }
 
-Noeud* Interpreteur::procedureCall() {
+Noeud* Interpreteur::instProcedure() {
     testerEtAvancer("appel");
-    tester("<INDEFINI>");
+    tester("<VARIABLE>");
     Procedure * proc = this->m_proc.getProcedure(this->m_lecteur.getSymbole().getChaine());
+    m_lecteur.avancer();
     testerEtAvancer("(");
     vector<Noeud*> *args = new vector<Noeud*>;
     bool continuer = true;
@@ -317,7 +317,7 @@ Noeud* Interpreteur::procedureCall() {
     }
     testerEtAvancer(")");
     testerEtAvancer(";");
-    return nullptr;//new NoeudInstProc(proc,args);
+    return new NoeudInstProc(proc,args);
 }
 
 Noeud* Interpreteur::instSi() {
