@@ -291,3 +291,23 @@ void NoeudInstAbs::traduitEnPython(ostream& cout, unsigned int indentation) cons
     this->m_variable->traduitEnPython(cout,0);
     cout << ")" ;
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// NoeudInstProc
+////////////////////////////////////////////////////////////////////////////////
+/*
+NoeudInstProc::NoeudInstProc(Procedure* proc, vector<Noeud*>* args) : m_proc(proc), m_args(args){
+
+}
+
+
+int NoeudInstProc::executer() {
+
+    
+}
+
+void NoeudInstProc::traduitEnPython(ostream& cout, unsigned int indentation) const {
+
+    
+}
+*/

@@ -18,13 +18,13 @@ public:
                                       //   la table des symboles (ts) et l'arbre abstrait (arbre) auront été construits
 	                                    // Sinon, une exception sera levée
 
-	inline const TableSymboles & getTable () const  { return m_table;    } // accesseur	
+	inline TableSymboles* & getTable () { return m_table; } // accesseur	
 	inline Noeud* getArbre () const { return m_arbre; }                    // accesseur
 	inline int getNbErreurs () const { return m_erreurs; }                    // accesseur
 	
 private:
     Lecteur        m_lecteur;  // Le lecteur de symboles utilisé pour analyser le fichier
-    TableSymboles  m_table;    // La table des symboles valués
+    TableSymboles* m_table;    // La table des symboles valués
     Noeud*         m_arbre;    // L'arbre abstrait
     TableProcedures m_proc;    // La table des procédures
     int            m_erreurs;  // Nombre d'erreurs
@@ -44,7 +44,8 @@ private:
 
     Noeud*  chaine();      //      <chaine> ::= <CHAINE>
                            //   <opBinaire> ::= + | - | *  | / | < | > | <= | >= | == | != | et | ou
-    Noeud*  procedure();   //   <programme> ::= procedure <CHAINE> ([ <variable> ] { , <variable> }) <seqInst> finproc
+    void    procedureDefinition();  //   <programme> ::= procedure <mot> ([ <variable> ] { , <variable> }) <seqInst> finproc
+    Noeud*  procedureCall();  //   <programme> ::= appel <mot> ([ <variable> ] { , <variable> })
     Noeud*  instSi();      //      <instSi> ::= si ( <expression> ) <seqInst> { sinonsi ( <expression> ) <seqInst> } [ sinon <seqInst> ] finsi
     Noeud*  instTantQue(); // <instTantQue> ::= tantque ( <expression> ) <seqInst> fintantque
     Noeud*  instRepeter(); // <instRepeter> ::= repeter <seqInst> jusqua ( <expression> )

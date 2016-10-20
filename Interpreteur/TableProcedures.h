@@ -2,6 +2,7 @@
 #define	TABLEPROCEDURES_H
 
 #include "Procedure.h"
+#include <map>
 #include <vector>
 
 using namespace std;
@@ -10,9 +11,12 @@ class TableProcedures {
 public:
     TableProcedures();
     TableProcedures(const TableProcedures& orig);
-    virtual ~TableProcedures();
+    ~TableProcedures();
+    void addProcedure(string name, vector<SymboleValue*>* arguments, Noeud* sequinst,TableSymboles* symboles);
+    Procedure* getProcedure(const string & name){ return this->m_procedures[name]; }
 private:
-    vector<Procedure> m_procedures;
+    //vector<const Procedure*> m_procedures;
+    map<string, Procedure*> m_procedures;
 };
 
 #endif	/* TABLEPROCEDURES_H */

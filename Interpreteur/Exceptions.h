@@ -36,6 +36,15 @@ private :
     const char* m_message;
 };
 
+class ProcedureException : public InterpreteurException {
+public:
+    ProcedureException(const char * message = NULL) : m_message(message) {}
+    const char * what() const throw() {
+        return m_message;
+    }
+private :
+    const char* m_message;
+};
 
 class IndefiniException : public InterpreteurException {
 public:

@@ -11,6 +11,7 @@ using namespace std;
 
 #include "Symbole.h"
 #include "Exceptions.h"
+//#include "Procedure.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 class Noeud {
@@ -151,6 +152,7 @@ class NoeudInstEcrire : public Noeud {
     vector<Noeud*>  m_expressions;
 };
 
+////////////////////////////////////////////////////////////////////////////////
 class NoeudInstLire : public Noeud {
     public:
         NoeudInstLire(vector<Noeud*> var);
@@ -162,6 +164,7 @@ class NoeudInstLire : public Noeud {
         vector<Noeud*> m_expressions;
 };
 
+////////////////////////////////////////////////////////////////////////////////
 class NoeudInstAbs : public Noeud {
     public:
         NoeudInstAbs(Noeud* var);
@@ -172,4 +175,20 @@ class NoeudInstAbs : public Noeud {
     private:
         Noeud* m_variable;
 };
+
+  /*   
+////////////////////////////////////////////////////////////////////////////////
+class NoeudInstProc : public Noeud {
+    public:
+        NoeudInstProc(Procedure* proc, vector<Noeud*>* args);
+        ~NoeudInstProc() {};
+        int executer();
+        void traduitEnPython(ostream& cout, unsigned int indentation) const override;
+
+    private:
+        Procedure* m_proc;
+        vector<Noeud*>* m_args;
+};
+*/
+
 #endif /* ARBREABSTRAIT_H */
