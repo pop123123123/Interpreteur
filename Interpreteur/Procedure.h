@@ -1,11 +1,14 @@
 #ifndef PROCEDURE_H
 #define	PROCEDURE_H
 
-#include "TableSymboles.h"
-#include "SymboleValue.h"
-#include "ArbreAbstrait.h"
-
+//#include "TableSymboles.h"
+//#include "SymboleValue.h"
+//#include "ArbreAbstrait.h"
 using namespace std;
+
+class Noeud;
+class SymboleValue;
+class TableSymboles;
 
 
 class Procedure {

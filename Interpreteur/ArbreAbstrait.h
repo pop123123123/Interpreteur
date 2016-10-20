@@ -11,7 +11,7 @@ using namespace std;
 
 #include "Symbole.h"
 #include "Exceptions.h"
-//#include "Procedure.h"
+#include "Procedure.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 class Noeud {
