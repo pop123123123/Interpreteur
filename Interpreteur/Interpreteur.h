@@ -21,6 +21,7 @@ public:
 	inline TableSymboles* & getTable () { return m_table; } // accesseur	
 	inline Noeud* getArbre () const { return m_arbre; }                    // accesseur
 	inline int getNbErreurs () const { return m_erreurs; }                    // accesseur
+        void traduitEnPython(ostream & cout,unsigned int indentation);
 	
 private:
     Lecteur        m_lecteur;  // Le lecteur de symboles utilisé pour analyser le fichier

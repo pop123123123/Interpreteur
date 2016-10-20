@@ -23,7 +23,7 @@ int main(int argc, char* argv[]) {
             cout << endl << "================ Syntaxe Correcte" << endl;
             // On affiche le contenu de la table des symboles avant d'exécuter le programme
             cout << endl << "================ Traduction en python : " << endl;
-            if (interpreteur.getArbre() != nullptr) interpreteur.getArbre()->traduitEnPython(cout, 0);
+            if (interpreteur.getArbre() != nullptr) interpreteur.traduitEnPython(cout, 0);
             cout << endl << "================ Table des symboles avant exécution : " << *interpreteur.getTable();
             cout << endl << "================ Execution de l'arbre" << endl;
             // On exécute le programme si l'arbre n'est pas vide

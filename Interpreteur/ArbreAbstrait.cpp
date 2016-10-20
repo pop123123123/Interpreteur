@@ -318,14 +318,13 @@ int NoeudInstProc::executer() {
 }
 
 void NoeudInstProc::traduitEnPython(ostream& cout, unsigned int indentation) const {
-    cout << string(indentation*3,' ') << "def " << this->m_proc->getName() << "(" ;
-    vector<SymboleValue*>* arguments = this->m_proc->getArgs();
-    for (int i = 0 ; i < arguments->size() ; i ++){
-        cout << (*arguments)[i]->getChaine() ;
-        if(i + 1 < arguments->size())
+    cout << string(indentation*3,' ') << this->m_proc->getName() << "(" ;
+    for (int i = 0 ; i < this->m_args->size() ; i ++){
+        (*this->m_args)[i]->traduitEnPython(cout,0) ;
+        if(i + 1 < this->m_args->size())
             cout << ", ";
     }
-    cout << "):" << endl;
-    this->m_proc->getSequence()->traduitEnPython(cout,indentation + 1);
     
+    cout << ")" ;
+   
 }

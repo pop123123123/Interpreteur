@@ -14,6 +14,7 @@ public:
     ~TableProcedures();
     void addProcedure(string name, vector<SymboleValue*>* arguments, Noeud* sequinst,TableSymboles* symboles);
     Procedure* getProcedure(const string & name){ return this->m_procedures[name]; }
+    void traduitEnPython(ostream & cout,unsigned int indentation);
 private:
     //vector<const Procedure*> m_procedures;
     map<string, Procedure*> m_procedures;

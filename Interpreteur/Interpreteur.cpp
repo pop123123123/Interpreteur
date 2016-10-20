@@ -8,6 +8,12 @@ Interpreteur::Interpreteur(ifstream & fichier) :
 m_lecteur(fichier), m_arbre(nullptr),m_proc(),m_erreurs(0) {
 }
 
+void Interpreteur::traduitEnPython(ostream& cout, unsigned int indentation) {
+    this->m_proc.traduitEnPython(cout , 0);
+    cout << endl;
+    this->getArbre()->traduitEnPython(cout, 0);
+}
+
 void Interpreteur::analyse() {
     bool proc_def = true;
     while (proc_def){
