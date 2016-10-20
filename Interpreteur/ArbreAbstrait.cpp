@@ -190,22 +190,34 @@ NoeudInstPour::NoeudInstPour(Noeud* declaration, Noeud* condition, Noeud* increm
 }
 
 int NoeudInstPour::executer() {
-  
-  for (m_declaration->executer();m_condition->executer();m_incrementation->executer()){
-      m_sequence->executer();
-  }
-  return 0; // La valeur renvoyée ne représente rien !
+    if(m_declaration == nullptr && m_incrementation == nullptr){
+        for(;m_condition->executer();) m_sequence->executer();
+    }
+    else if(m_declaration !=nullptr && m_incrementation ==nullptr){
+        for(m_declaration->executer(); m_condition->executer();) m_sequence->executer();
+    }
+    else if(m_declaration ==nullptr && m_incrementation !=nullptr){
+        for(;m_condition->executer();m_incrementation->executer()){
+            m_sequence->executer();
+        }
+    }
+    else for(m_declaration->executer(); m_condition->executer();m_incrementation->executer()){
+            m_sequence->executer();
+    }
+    return 0;
 }
 
 void NoeudInstPour::traduitEnPython(ostream& cout, unsigned int indentation) const {
     cout << string(indentation*3,' ');
-    this->m_declaration->traduitEnPython(cout,0);
+    if (this->m_declaration!=nullptr)
+        this->m_declaration->traduitEnPython(cout,0);
     cout << endl << string(indentation*3,' ');
     cout << "while ";
     this->m_condition->traduitEnPython(cout,0);
     cout << " :" << endl;
     this->m_sequence->traduitEnPython(cout,indentation+1);
-    this->m_incrementation->traduitEnPython(cout,indentation + 1);
+    if (this->m_incrementation!=nullptr)
+        this->m_incrementation->traduitEnPython(cout,indentation + 1);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

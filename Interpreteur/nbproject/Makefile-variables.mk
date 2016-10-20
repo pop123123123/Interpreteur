@@ -7,21 +7,21 @@ CND_BASEDIR=`pwd`
 CND_BUILDDIR=build
 CND_DISTDIR=dist
 # Debug configuration
-CND_PLATFORM_Debug=GNU-Linux-x86
-CND_ARTIFACT_DIR_Debug=dist/Debug/GNU-Linux-x86
+CND_PLATFORM_Debug=GNU-Linux
+CND_ARTIFACT_DIR_Debug=dist/Debug/GNU-Linux
 CND_ARTIFACT_NAME_Debug=interpreteur
-CND_ARTIFACT_PATH_Debug=dist/Debug/GNU-Linux-x86/interpreteur
-CND_PACKAGE_DIR_Debug=dist/Debug/GNU-Linux-x86/package
+CND_ARTIFACT_PATH_Debug=dist/Debug/GNU-Linux/interpreteur
+CND_PACKAGE_DIR_Debug=dist/Debug/GNU-Linux/package
 CND_PACKAGE_NAME_Debug=interpreteur.tar
-CND_PACKAGE_PATH_Debug=dist/Debug/GNU-Linux-x86/package/interpreteur.tar
+CND_PACKAGE_PATH_Debug=dist/Debug/GNU-Linux/package/interpreteur.tar
 # Release configuration
-CND_PLATFORM_Release=GNU-Linux-x86
-CND_ARTIFACT_DIR_Release=dist/Release/GNU-Linux-x86
+CND_PLATFORM_Release=GNU-Linux
+CND_ARTIFACT_DIR_Release=dist/Release/GNU-Linux
 CND_ARTIFACT_NAME_Release=interpreteur
-CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux-x86/interpreteur
-CND_PACKAGE_DIR_Release=dist/Release/GNU-Linux-x86/package
+CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux/interpreteur
+CND_PACKAGE_DIR_Release=dist/Release/GNU-Linux/package
 CND_PACKAGE_NAME_Release=interpreteur.tar
-CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux-x86/package/interpreteur.tar
+CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux/package/interpreteur.tar
 #
 # include compiler specific variables
 #

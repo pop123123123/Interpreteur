@@ -1,16 +1,20 @@
 # Fichier de test
 # Les lignes de commentaires commencent par #
 procedure principale()
-x = 0;
-y = 0;
-z = 0;
-pour (a=0; a < 10; a = a + 1)
-si (a==0) x = x + 5;
-sinonsi (a==0) y = y + 5;
-sinonsi (a==5) y = y+2;
-sinonsi (y==2) y = y+a;
-sinon z = z + 1;
-finsi
-finpour
+	x = 0;
+	y = 0;
+	z = 0;
+	a = 5;
+	si (a==0)
+		x = x + 5;
+	sinonsi (a==0)
+		y = y + 5;
+	sinonsi (a==5)
+		y = y+2;
+	sinonsi (y==2)
+		y = y+a;
+	sinon
+		z = z + 1;
+	finsi
 finproc
 # Commentaire Final

@@ -4,5 +4,6 @@ procedure principale()
   i = 0;
   j = 0;
   lire (i,j);
+  ecrire(i,j);
 finproc
 # Commentaire Final

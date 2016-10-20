@@ -9,14 +9,14 @@ m_lecteur(fichier), m_arbre(nullptr),m_proc(),m_erreurs(0) {
 }
 
 void Interpreteur::analyse() {
-    bool proc_def = true;
+    /*bool proc_def = true;
     while (proc_def){
         try{
             procedureDefinition();
         }catch(SyntaxeException s){
             proc_def = false;
         }        
-    }
+    }*/
     this->m_table = new TableSymboles;
     m_arbre = programme(); // on lance l'analyse de la première règle
 }
@@ -327,7 +327,7 @@ Noeud* Interpreteur::instSi() {
     try{
         testerEtAvancer("si");
         testerEtAvancer("(");
-        Noeud* condition = expression(); // On mémorise la condition
+        Noeud* condition = expBool(); // On mémorise la condition
         conditions->push_back(condition);
         testerEtAvancer(")");
         Noeud* sequence = seqInst();     // On mémorise la séquence d'instruction
@@ -337,7 +337,7 @@ Noeud* Interpreteur::instSi() {
             try{
                 testerEtAvancer("sinonsi");
                 testerEtAvancer("(");
-                Noeud* condition = expression(); // On mémorise la condition
+                Noeud* condition = expBool(); // On mémorise la condition
                 conditions->push_back(condition);
                 testerEtAvancer(")");
                 Noeud* sequence = seqInst();     // On mémorise la séquence d'instruction
@@ -366,7 +366,7 @@ Noeud* Interpreteur::instTantQue() {
   // <instTantQue> ::= tantque ( <expression> ) <seqInst> fintantque
   testerEtAvancer("tantque");
   testerEtAvancer("(");
-  Noeud* condition = expression(); // On mémorise la condition
+  Noeud* condition = expBool(); // On mémorise la condition
   testerEtAvancer(")");
   Noeud* sequence = seqInst();     // On mémorise la séquence d'instruction
   testerEtAvancer("fintantque");
@@ -379,17 +379,21 @@ Noeud* Interpreteur::instRepeter() {
   Noeud* sequence = seqInst();     // On mémorise la séquence d'instruction
   testerEtAvancer("jusqua");
   testerEtAvancer("(");
-  Noeud* condition = expression(); // On mémorise la condition
+  Noeud* condition = expBool(); // On mémorise la condition
   testerEtAvancer(")");
   return new NoeudInstRepeter(condition, sequence); // Et on renvoie un noeud Instruction instRepeter
 }
 
 Noeud* Interpreteur::instPour() {
-    //<instPour> ::= pour ( [<affectation>]; <expression>; [<affectation>] ) <seqInst> finpour
+    //<instPour> ::= pour ( [<affectation>]; <expBool>; [<affectation>] ) <seqInst> finpour
     testerEtAvancer("pour");
     testerEtAvancer("(");
     // Test affectation d'une variable => optionnel
-    Noeud* declaration = affectation();
+    Noeud* declaration = nullptr;
+    try{
+        declaration = affectation();
+    }catch(SyntaxeException e){
+    }
     testerEtAvancer(";");
 
     // Test condition de boucle
@@ -397,8 +401,11 @@ Noeud* Interpreteur::instPour() {
     testerEtAvancer(";");
     
     // Test incrémentation d'une variable => optionnel
-    Noeud* incrementation = affectation();
-        
+    Noeud* incrementation = nullptr;
+    try{
+        incrementation = affectation();
+    }catch(SyntaxeException e){
+    }
     testerEtAvancer(")");
     Noeud* sequence = seqInst();     // On mémorise la séquence d'instruction
     testerEtAvancer("finpour");
