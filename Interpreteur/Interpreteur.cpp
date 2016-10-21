@@ -21,7 +21,7 @@ void Interpreteur::analyse() {
             procedureDefinition();
         }catch(ProcedureException s){
             proc_def = false;
-        }        
+        }
     }
     this->m_table = new TableSymboles;
     m_arbre = programme(); // on lance l'analyse de la première règle
