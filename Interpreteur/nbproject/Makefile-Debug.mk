@@ -43,6 +43,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/SymboleValue.o \
 	${OBJECTDIR}/TableProcedures.o \
 	${OBJECTDIR}/TableSymboles.o \
+	${OBJECTDIR}/Type.o \
 	${OBJECTDIR}/main.o
 
 # Test Directory
@@ -115,6 +116,11 @@ ${OBJECTDIR}/TableSymboles.o: TableSymboles.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/TableSymboles.o TableSymboles.cpp
+
+${OBJECTDIR}/Type.o: Type.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Type.o Type.cpp
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -245,6 +251,19 @@ ${OBJECTDIR}/TableSymboles_nomain.o: ${OBJECTDIR}/TableSymboles.o TableSymboles.
 	    $(COMPILE.cc) -g -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/TableSymboles_nomain.o TableSymboles.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/TableSymboles.o ${OBJECTDIR}/TableSymboles_nomain.o;\
+	fi
+
+${OBJECTDIR}/Type_nomain.o: ${OBJECTDIR}/Type.o Type.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/Type.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Type_nomain.o Type.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/Type.o ${OBJECTDIR}/Type_nomain.o;\
 	fi
 
 ${OBJECTDIR}/main_nomain.o: ${OBJECTDIR}/main.o main.cpp 

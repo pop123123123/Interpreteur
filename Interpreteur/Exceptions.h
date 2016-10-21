@@ -68,5 +68,12 @@ public:
     }
 };
 
+class ExecutionException : public InterpreteurException {
+public:
+    const char * what() const throw() {
+        return "Operation Interdite sur ces types";
+    }
+};
+
 #endif	/* EXCEPTIONS_H */
 

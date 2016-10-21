@@ -2,6 +2,7 @@
 #include "ArbreAbstrait.h"
 #include "Symbole.h"
 #include "SymboleValue.h"
+#include "Type.h"
 #include "Exceptions.h"
 #include <typeinfo>
 #include <iomanip>
@@ -13,10 +14,10 @@
 NoeudSeqInst::NoeudSeqInst() : m_instructions() {
 }
 
-int NoeudSeqInst::executer() {
+Type & NoeudSeqInst::executer() {
   for (unsigned int i = 0; i < m_instructions.size(); i++)
     m_instructions[i]->executer(); // on exécute chaque instruction de la séquence
-  return 0; // La valeur renvoyée ne représente rien !
+  // La valeur renvoyée ne représente rien !
 }
 
 void NoeudSeqInst::ajoute(Noeud* instruction) {
@@ -38,10 +39,10 @@ NoeudAffectation::NoeudAffectation(Noeud* variable, Noeud* expression)
 : m_variable(variable), m_expression(expression) {
 }
 
-int NoeudAffectation::executer() {
-  int valeur = m_expression->executer(); // On exécute (évalue) l'expression
+Type & NoeudAffectation::executer() {
+  Type valeur = m_expression->executer(); // On exécute (évalue) l'expression
   ((SymboleValue*) m_variable)->setValeur(valeur); // On affecte la variable
-  return 0; // La valeur renvoyée ne représente rien !
+  // La valeur renvoyée ne représente rien !
 }
 
 void NoeudAffectation::traduitEnPython(ostream& cout, unsigned int indentation) const {
@@ -58,8 +59,8 @@ NoeudOperateurBinaire::NoeudOperateurBinaire(Symbole operateur, Noeud* operandeG
 : m_operateur(operateur), m_operandeGauche(operandeGauche), m_operandeDroit(operandeDroit) {
 }
 
-int NoeudOperateurBinaire::executer() {
-  int og, od, valeur;
+Type & NoeudOperateurBinaire::executer() {
+  Type og, od, valeur;
   if (m_operandeGauche != nullptr) og = m_operandeGauche->executer(); // On évalue l'opérande gauche
   if (m_operandeDroit != nullptr) od = m_operandeDroit->executer(); // On évalue l'opérande droit
   // Et on combine les deux opérandes en fonctions de l'opérateur
@@ -99,7 +100,7 @@ NoeudInstSi::NoeudInstSi(vector<Noeud*> condition, vector<Noeud*> sequence)
 : m_condition(condition), m_sequence(sequence) {
 }
 
-int NoeudInstSi::executer() {
+Type & NoeudInstSi::executer() {
     int i = 0 ;
     while(i<m_condition.size() && i>=0){
         if (m_condition[i]->executer()){
@@ -111,7 +112,7 @@ int NoeudInstSi::executer() {
     }
     if(i!=-1 && m_sequence.size()>m_condition.size())
         m_sequence[m_sequence.size()-1]->executer();
-  return 0; // La valeur renvoyée ne représente rien !
+  // La valeur renvoyée ne représente rien !
 }
 
 void NoeudInstSi::traduitEnPython(ostream& cout, unsigned int indentation) const {
@@ -144,9 +145,9 @@ NoeudInstTantQue::NoeudInstTantQue(Noeud* condition, Noeud* sequence)
 : m_condition(condition), m_sequence(sequence) {
 }
 
-int NoeudInstTantQue::executer() {
+Type & NoeudInstTantQue::executer() {
   while (m_condition->executer()) m_sequence->executer();
-  return 0; // La valeur renvoyée ne représente rien !
+  // La valeur renvoyée ne représente rien !
 }
 
 void NoeudInstTantQue::traduitEnPython(ostream& cout, unsigned int indentation) const {
@@ -167,11 +168,11 @@ NoeudInstRepeter::NoeudInstRepeter(Noeud* condition, Noeud* sequence)
 : m_condition(condition), m_sequence(sequence) {
 }
 
-int NoeudInstRepeter::executer() {
+Type & NoeudInstRepeter::executer() {
   do{
       m_sequence->executer(); 
   }while (!m_condition->executer());
-  return 0; // La valeur renvoyée ne représente rien !
+  // La valeur renvoyée ne représente rien !
 }
 
 void NoeudInstRepeter::traduitEnPython(ostream& cout, unsigned int indentation) const {
@@ -189,7 +190,7 @@ NoeudInstPour::NoeudInstPour(Noeud* declaration, Noeud* condition, Noeud* increm
 : m_declaration(declaration), m_condition(condition), m_incrementation(incrementation), m_sequence(sequence) {
 }
 
-int NoeudInstPour::executer() {
+Type & NoeudInstPour::executer() {
     if(m_declaration == nullptr && m_incrementation == nullptr){
         for(;m_condition->executer();) m_sequence->executer();
     }
@@ -204,7 +205,7 @@ int NoeudInstPour::executer() {
     else for(m_declaration->executer(); m_condition->executer();m_incrementation->executer()){
             m_sequence->executer();
     }
-    return 0;
+    
 }
 
 void NoeudInstPour::traduitEnPython(ostream& cout, unsigned int indentation) const {
@@ -229,7 +230,7 @@ NoeudInstEcrire::NoeudInstEcrire(vector<Noeud*> expressions)
     
 }
 
-int NoeudInstEcrire::executer() {
+Type & NoeudInstEcrire::executer() {
     Noeud* it = nullptr;
     for (int i = 0 ; i < m_expressions.size() ; i++){
         it = m_expressions[i];
@@ -240,7 +241,7 @@ int NoeudInstEcrire::executer() {
         }else
             cout << it->executer();
     }
-  return 0; // La valeur renvoyée ne représente rien !
+  // La valeur renvoyée ne représente rien !
 }
 
 void NoeudInstEcrire::traduitEnPython(ostream& cout, unsigned int indentation) const {
@@ -261,7 +262,7 @@ void NoeudInstEcrire::traduitEnPython(ostream& cout, unsigned int indentation) c
 NoeudInstLire::NoeudInstLire(vector<Noeud*> expressions) : m_expressions(expressions) {
 }
 
-int NoeudInstLire::executer() {
+Type & NoeudInstLire::executer() {
     for(int i=0; i < m_expressions.size(); i++){
         int a;
         cout << ((SymboleValue*)m_expressions[i])->getChaine() << " = ";
@@ -286,7 +287,7 @@ NoeudInstAbs::NoeudInstAbs(Noeud* var) : m_variable(var){
 }
 
 
-int NoeudInstAbs::executer() {
+Type & NoeudInstAbs::executer() {
     int a = this->m_variable->executer();
     try{
         if(a < 0)
@@ -313,8 +314,8 @@ NoeudInstProc::NoeudInstProc(Procedure* proc, vector<Noeud*>* args) : m_proc(pro
 }
 
 
-int NoeudInstProc::executer() {
-    return this->m_proc->execute(this->m_args);
+Type & NoeudInstProc::executer() {
+    this->m_proc->execute(this->m_args);
 }
 
 void NoeudInstProc::traduitEnPython(ostream& cout, unsigned int indentation) const {

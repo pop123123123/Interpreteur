@@ -13,6 +13,7 @@
       <itemPath>SymboleValue.h</itemPath>
       <itemPath>TableProcedures.h</itemPath>
       <itemPath>TableSymboles.h</itemPath>
+      <itemPath>Type.h</itemPath>
     </logicalFolder>
     <logicalFolder name="Interpreteur"
                    displayName="Interpreteur"
@@ -41,6 +42,7 @@
       <itemPath>SymboleValue.cpp</itemPath>
       <itemPath>TableProcedures.cpp</itemPath>
       <itemPath>TableSymboles.cpp</itemPath>
+      <itemPath>Type.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -122,6 +124,10 @@
       <item path="TableSymboles.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="TableSymboles.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Type.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Type.h" ex="false" tool="3" flavor2="0">
       </item>
       <folder path="TestFiles/f1">
         <cTool>
@@ -208,6 +214,10 @@
       <item path="TableSymboles.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="TableSymboles.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Type.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Type.h" ex="false" tool="3" flavor2="0">
       </item>
       <folder path="TestFiles/f1">
         <cTool>
