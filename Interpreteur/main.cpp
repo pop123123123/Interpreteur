@@ -8,8 +8,8 @@ int main(int argc, char* argv[]) {
     if (argc != 2) {
         cout << "Usage : " << argv[0] << " nom_fichier_source" << endl << endl;
         cout << "Entrez le nom du fichier que voulez-vous interpréter : ";
-        //nomFich = "testRepeter.txt";
-        getline(cin, nomFich);
+        nomFich = "programme.txt";//testVariableChaine.txt";
+        //getline(cin, nomFich);
     } else
         nomFich = argv[1];
     ifstream fichier(nomFich.c_str());

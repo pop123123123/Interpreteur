@@ -19,7 +19,7 @@ class Noeud {
 // Classe abstraite dont dériveront toutes les classes servant à représenter l'arbre abstrait
 // Remarque : la classe ne contient aucun constructeur
   public:
-    virtual Type & executer() =0 ; // Méthode pure (non implémentée) qui rend la classe abstraite
+    virtual Type * executer() =0 ; // Méthode pure (non implémentée) qui rend la classe abstraite
     virtual void ajoute(Noeud* instruction) { throw OperationInterditeException(); }
     virtual ~Noeud() {} // Présence d'un destructeur virtuel conseillée dans les classes abstraites
     virtual void traduitEnPython(ostream & cout,unsigned int indentation)const = 0;
@@ -32,7 +32,7 @@ class NoeudSeqInst : public Noeud {
   public:
      NoeudSeqInst();   // Construit une séquence d'instruction vide
     ~NoeudSeqInst() {} // A cause du destructeur virtuel de la classe Noeud
-    Type & executer();    // Exécute chaque instruction de la séquence
+    Type * executer();    // Exécute chaque instruction de la séquence
     void ajoute(Noeud* instruction);  // Ajoute une instruction à la séquence
     void traduitEnPython(ostream& cout, unsigned int indentation) const override;
 
@@ -47,7 +47,7 @@ class NoeudAffectation : public Noeud {
   public:
      NoeudAffectation(Noeud* variable, Noeud* expression); // construit une affectation
     ~NoeudAffectation() {} // A cause du destructeur virtuel de la classe Noeud
-    Type & executer();        // Exécute (évalue) l'expression et affecte sa valeur à la variable
+    Type * executer();        // Exécute (évalue) l'expression et affecte sa valeur à la variable
     void traduitEnPython(ostream& cout, unsigned int indentation) const override;
 
   private:
@@ -63,7 +63,7 @@ class NoeudOperateurBinaire : public Noeud {
     NoeudOperateurBinaire(Symbole operateur, Noeud* operandeGauche, Noeud* operandeDroit);
     // Construit une opération binaire : operandeGauche operateur OperandeDroit
    ~NoeudOperateurBinaire() {} // A cause du destructeur virtuel de la classe Noeud
-    Type & executer();            // Exécute (évalue) l'opération binaire)
+    Type * executer();            // Exécute (évalue) l'opération binaire)
     void traduitEnPython(ostream& cout, unsigned int indentation) const override;
 
   private:
@@ -80,7 +80,7 @@ class NoeudInstSi : public Noeud {
     NoeudInstSi(vector<Noeud*> condition, vector<Noeud*> sequence);
      // Construit une "instruction si" avec sa condition et sa séquence d'instruction
    ~NoeudInstSi() {} // A cause du destructeur virtuel de la classe Noeud
-    Type & executer();  // Exécute l'instruction si : si condition vraie on exécute la séquence
+    Type * executer();  // Exécute l'instruction si : si condition vraie on exécute la séquence
     void traduitEnPython(ostream & cout,unsigned int indentation)const;
     
   private:
@@ -96,7 +96,7 @@ class NoeudInstTantQue : public Noeud {
     NoeudInstTantQue(Noeud* condition, Noeud* sequence);
      // Construit une "instruction si" avec sa condition et sa séquence d'instruction
    ~NoeudInstTantQue() {} // A cause du destructeur virtuel de la classe Noeud
-    Type & executer();  // Exécute l'instruction si : si condition vraie on exécute la séquence
+    Type * executer();  // Exécute l'instruction si : si condition vraie on exécute la séquence
     void traduitEnPython(ostream& cout, unsigned int indentation) const override;
 
   private:
@@ -112,7 +112,7 @@ class NoeudInstRepeter : public Noeud {
     NoeudInstRepeter(Noeud* condition, Noeud* sequence);
      // Construit une "instruction si" avec sa condition et sa séquence d'instruction
    ~NoeudInstRepeter() {} // A cause du destructeur virtuel de la classe Noeud
-    Type & executer();  // Exécute l'instruction si : si condition vraie on exécute la séquence
+    Type * executer();  // Exécute l'instruction si : si condition vraie on exécute la séquence
     void traduitEnPython(ostream& cout, unsigned int indentation) const override;
 
   private:
@@ -128,7 +128,7 @@ class NoeudInstPour : public Noeud {
     NoeudInstPour(Noeud* declaration, Noeud* condition, Noeud* incrementation, Noeud* sequence);
      // Construit une "instruction si" avec sa condition et sa séquence d'instruction
    ~NoeudInstPour() {} // A cause du destructeur virtuel de la classe Noeud
-    Type & executer();  // Exécute l'instruction si : si condition vraie on exécute la séquence
+    Type * executer();  // Exécute l'instruction si : si condition vraie on exécute la séquence
     void traduitEnPython(ostream& cout, unsigned int indentation) const override;
 
   private:
@@ -146,7 +146,7 @@ class NoeudInstEcrire : public Noeud {
     NoeudInstEcrire(vector<Noeud*> expressions);
      // Construit une "instruction si" avec sa condition et sa séquence d'instruction
    ~NoeudInstEcrire() {} // A cause du destructeur virtuel de la classe Noeud
-    Type & executer();  // Exécute l'instruction si : si condition vraie on exécute la séquence
+    Type * executer();  // Exécute l'instruction si : si condition vraie on exécute la séquence
     void traduitEnPython(ostream& cout, unsigned int indentation) const override;
 
   private:
@@ -158,7 +158,7 @@ class NoeudInstLire : public Noeud {
     public:
         NoeudInstLire(vector<Noeud*> var);
         ~NoeudInstLire() {};
-        Type & executer();
+        Type * executer();
         void traduitEnPython(ostream& cout, unsigned int indentation) const override;
 
     private:
@@ -170,7 +170,7 @@ class NoeudInstAbs : public Noeud {
     public:
         NoeudInstAbs(Noeud* var);
         ~NoeudInstAbs() {};
-        Type & executer();
+        Type * executer();
         void traduitEnPython(ostream& cout, unsigned int indentation) const override;
 
     private:
@@ -183,7 +183,7 @@ class NoeudInstProc : public Noeud {
     public:
         NoeudInstProc(Procedure* proc, vector<Noeud*>* args);
         ~NoeudInstProc() {};
-        Type & executer();
+        Type * executer();
         void traduitEnPython(ostream& cout, unsigned int indentation) const override;
 
     private:

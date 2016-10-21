@@ -14,7 +14,7 @@
 NoeudSeqInst::NoeudSeqInst() : m_instructions() {
 }
 
-Type & NoeudSeqInst::executer() {
+Type * NoeudSeqInst::executer() {
   for (unsigned int i = 0; i < m_instructions.size(); i++)
     m_instructions[i]->executer(); // on exécute chaque instruction de la séquence
   // La valeur renvoyée ne représente rien !
@@ -39,8 +39,8 @@ NoeudAffectation::NoeudAffectation(Noeud* variable, Noeud* expression)
 : m_variable(variable), m_expression(expression) {
 }
 
-Type & NoeudAffectation::executer() {
-  Type valeur = m_expression->executer(); // On exécute (évalue) l'expression
+Type * NoeudAffectation::executer() {
+  Type * valeur = m_expression->executer(); // On exécute (évalue) l'expression
   ((SymboleValue*) m_variable)->setValeur(valeur); // On affecte la variable
   // La valeur renvoyée ne représente rien !
 }
@@ -59,26 +59,26 @@ NoeudOperateurBinaire::NoeudOperateurBinaire(Symbole operateur, Noeud* operandeG
 : m_operateur(operateur), m_operandeGauche(operandeGauche), m_operandeDroit(operandeDroit) {
 }
 
-Type & NoeudOperateurBinaire::executer() {
-  Type og, od, valeur;
+Type * NoeudOperateurBinaire::executer() {
+  Type * og, * od, * valeur;
   if (m_operandeGauche != nullptr) og = m_operandeGauche->executer(); // On évalue l'opérande gauche
   if (m_operandeDroit != nullptr) od = m_operandeDroit->executer(); // On évalue l'opérande droit
   // Et on combine les deux opérandes en fonctions de l'opérateur
-  if (this->m_operateur == "+") valeur = (og + od);
-  else if (this->m_operateur == "-") valeur = (og - od);
-  else if (this->m_operateur == "*") valeur = (og * od);
-  else if (this->m_operateur == "==") valeur = (og == od);
-  else if (this->m_operateur == "!=") valeur = (og != od);
-  else if (this->m_operateur == "<") valeur = (og < od);
-  else if (this->m_operateur == ">") valeur = (og > od);
-  else if (this->m_operateur == "<=") valeur = (og <= od);
-  else if (this->m_operateur == ">=") valeur = (og >= od);
-  else if (this->m_operateur == "et") valeur = (og && od);
-  else if (this->m_operateur == "ou") valeur = (og || od);
-  else if (this->m_operateur == "non") valeur = (!og);
+  if (this->m_operateur == "+") valeur = &(*og + *od);
+  else if (this->m_operateur == "-") valeur = &(*og - *od);
+  else if (this->m_operateur == "*") valeur = &(*og * *od);
+  else if (this->m_operateur == "==") valeur = (*og == *od) ? new Entier(0) : new Entier(1) ;
+  else if (this->m_operateur == "!=") valeur = (*og != *od) ? new Entier(0) : new Entier(1) ;
+  else if (this->m_operateur == "<") valeur = (*og < *od) ? new Entier(0) : new Entier(1) ;
+  else if (this->m_operateur == ">") valeur = (*og > *od) ? new Entier(0) : new Entier(1) ;
+  else if (this->m_operateur == "<=") valeur = (*og <= *od) ? new Entier(0) : new Entier(1) ;
+  else if (this->m_operateur == ">=") valeur = (*og >= *od) ? new Entier(0) : new Entier(1) ;
+  else if (this->m_operateur == "et") valeur = (*og && *od) ? new Entier(0) : new Entier(1) ;
+  else if (this->m_operateur == "ou") valeur = (*og || *od) ? new Entier(0) : new Entier(1) ;
+  else if (this->m_operateur == "non") valeur = (!*og) ? new Entier(0) : new Entier(1) ;
   else if (this->m_operateur == "/") {
-    if (od == 0) throw DivParZeroException();
-    valeur = og / od;
+    if (*od == *(new Entier(0))) throw DivParZeroException();
+    valeur = &(*og / *od);
   }
   return valeur; // On retourne la valeur calculée
 }
@@ -100,7 +100,7 @@ NoeudInstSi::NoeudInstSi(vector<Noeud*> condition, vector<Noeud*> sequence)
 : m_condition(condition), m_sequence(sequence) {
 }
 
-Type & NoeudInstSi::executer() {
+Type * NoeudInstSi::executer() {
     int i = 0 ;
     while(i<m_condition.size() && i>=0){
         if (m_condition[i]->executer()){
@@ -145,7 +145,7 @@ NoeudInstTantQue::NoeudInstTantQue(Noeud* condition, Noeud* sequence)
 : m_condition(condition), m_sequence(sequence) {
 }
 
-Type & NoeudInstTantQue::executer() {
+Type * NoeudInstTantQue::executer() {
   while (m_condition->executer()) m_sequence->executer();
   // La valeur renvoyée ne représente rien !
 }
@@ -168,7 +168,7 @@ NoeudInstRepeter::NoeudInstRepeter(Noeud* condition, Noeud* sequence)
 : m_condition(condition), m_sequence(sequence) {
 }
 
-Type & NoeudInstRepeter::executer() {
+Type * NoeudInstRepeter::executer() {
   do{
       m_sequence->executer(); 
   }while (!m_condition->executer());
@@ -190,7 +190,7 @@ NoeudInstPour::NoeudInstPour(Noeud* declaration, Noeud* condition, Noeud* increm
 : m_declaration(declaration), m_condition(condition), m_incrementation(incrementation), m_sequence(sequence) {
 }
 
-Type & NoeudInstPour::executer() {
+Type * NoeudInstPour::executer() {
     if(m_declaration == nullptr && m_incrementation == nullptr){
         for(;m_condition->executer();) m_sequence->executer();
     }
@@ -230,7 +230,7 @@ NoeudInstEcrire::NoeudInstEcrire(vector<Noeud*> expressions)
     
 }
 
-Type & NoeudInstEcrire::executer() {
+Type * NoeudInstEcrire::executer() {
     Noeud* it = nullptr;
     for (int i = 0 ; i < m_expressions.size() ; i++){
         it = m_expressions[i];
@@ -262,12 +262,12 @@ void NoeudInstEcrire::traduitEnPython(ostream& cout, unsigned int indentation) c
 NoeudInstLire::NoeudInstLire(vector<Noeud*> expressions) : m_expressions(expressions) {
 }
 
-Type & NoeudInstLire::executer() {
+Type * NoeudInstLire::executer() {
     for(int i=0; i < m_expressions.size(); i++){
         int a;
         cout << ((SymboleValue*)m_expressions[i])->getChaine() << " = ";
         cin >>  a;
-        ((SymboleValue*) m_expressions[i])->setValeur(a);
+        ((SymboleValue*) m_expressions[i])->setValeur(new Entier(a));
     }
 }
 
@@ -287,15 +287,16 @@ NoeudInstAbs::NoeudInstAbs(Noeud* var) : m_variable(var){
 }
 
 
-Type & NoeudInstAbs::executer() {
-    int a = this->m_variable->executer();
+Type * NoeudInstAbs::executer() {
     try{
+        Entier* e = dynamic_cast<Entier*>(this->m_variable->executer());
+        int a = e->getValue();
         if(a < 0)
-            return -a;
+            return new Entier(-a);
         else
-            return a;
+            return new Entier(a);
     }catch(exception e){
-        return a;
+        throw ExecutionException();
     }
 }
 
@@ -314,7 +315,7 @@ NoeudInstProc::NoeudInstProc(Procedure* proc, vector<Noeud*>* args) : m_proc(pro
 }
 
 
-Type & NoeudInstProc::executer() {
+Type * NoeudInstProc::executer() {
     this->m_proc->execute(this->m_args);
 }
 

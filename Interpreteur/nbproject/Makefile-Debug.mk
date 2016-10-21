@@ -21,7 +21,7 @@ FC=gfortran
 AS=as
 
 # Macros
-CND_PLATFORM=GNU-Linux-x86
+CND_PLATFORM=GNU-Linux
 CND_DLIB_EXT=so
 CND_CONF=Debug
 CND_DISTDIR=dist
@@ -52,6 +52,11 @@ TESTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tests
 # Test Files
 TESTFILES= \
 	${TESTDIR}/TestFiles/f1
+
+# Test Object Files
+TESTOBJECTFILES= \
+	${TESTDIR}/_ext/5c0/newtestclass1.o \
+	${TESTDIR}/_ext/5c0/noeudInstPourTestRunner.o
 
 # C Compiler Flags
 CFLAGS=
@@ -131,22 +136,24 @@ ${OBJECTDIR}/main.o: main.cpp
 .build-subprojects:
 
 # Build Test Targets
-.build-tests-conf: .build-conf ${TESTFILES}
-${TESTDIR}/TestFiles/f1: ${TESTDIR}/_ext/1472/newtestclass1.o ${TESTDIR}/_ext/1472/noeudInstPourTestRunner.o ${OBJECTFILES:%.o=%_nomain.o}
+.build-tests-conf: .build-tests-subprojects .build-conf ${TESTFILES}
+.build-tests-subprojects:
+
+${TESTDIR}/TestFiles/f1: ${TESTDIR}/_ext/5c0/newtestclass1.o ${TESTDIR}/_ext/5c0/noeudInstPourTestRunner.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} `cppunit-config --libs` `cppunit-config --libs`   
 
 
-${TESTDIR}/_ext/1472/newtestclass1.o: ../newtestclass1.cpp 
-	${MKDIR} -p ${TESTDIR}/_ext/1472
+${TESTDIR}/_ext/5c0/newtestclass1.o: ../newtestclass1.cpp 
+	${MKDIR} -p ${TESTDIR}/_ext/5c0
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -std=c++11 `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/_ext/1472/newtestclass1.o ../newtestclass1.cpp
+	$(COMPILE.cc) -g -std=c++11 `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/_ext/5c0/newtestclass1.o ../newtestclass1.cpp
 
 
-${TESTDIR}/_ext/1472/noeudInstPourTestRunner.o: ../noeudInstPourTestRunner.cpp 
-	${MKDIR} -p ${TESTDIR}/_ext/1472
+${TESTDIR}/_ext/5c0/noeudInstPourTestRunner.o: ../noeudInstPourTestRunner.cpp 
+	${MKDIR} -p ${TESTDIR}/_ext/5c0
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -std=c++11 `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/_ext/1472/noeudInstPourTestRunner.o ../noeudInstPourTestRunner.cpp
+	$(COMPILE.cc) -g -std=c++11 `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/_ext/5c0/noeudInstPourTestRunner.o ../noeudInstPourTestRunner.cpp
 
 
 ${OBJECTDIR}/ArbreAbstrait_nomain.o: ${OBJECTDIR}/ArbreAbstrait.o ArbreAbstrait.cpp 

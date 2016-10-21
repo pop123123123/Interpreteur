@@ -52,6 +52,7 @@ void Interpreteur::erreur(const string & message) const throw (SyntaxeException)
   sprintf(messageWhat,
           "Ligne %d, Colonne %d - Erreur de syntaxe - %s - Symbole trouvé : %s",
           m_lecteur.getLigne(), m_lecteur.getColonne(), message.c_str(), m_lecteur.getSymbole().getChaine().c_str());
+  std::cout << m_lecteur.getSymbole() << endl;
   throw SyntaxeException(messageWhat);
 }
 
@@ -147,9 +148,9 @@ Noeud* Interpreteur::expression() {
 }
 
 Noeud* Interpreteur::facteur() {
-  // <facteur> ::= <entier> | <variable> | - <facteur> | non <facteur> | | <facteur> | | ( <expression> )
-  Noeud* fact = nullptr;
-  if (m_lecteur.getSymbole() == "<VARIABLE>" || m_lecteur.getSymbole() == "<ENTIER>") {
+  // <facteur> ::= <entier> | <chaine> | <variable> | - <facteur> | non <facteur> | | <facteur> | | ( <expression> )
+    Noeud* fact;
+    if (m_lecteur.getSymbole() == "<VARIABLE>" || m_lecteur.getSymbole() == "<ENTIER>" || m_lecteur.getSymbole() == "<CHAINE>") {
     fact = m_table->chercheAjoute(m_lecteur.getSymbole()); // on ajoute la variable ou l'entier à la table
     m_lecteur.avancer();
   } else if (m_lecteur.getSymbole() == "-") { // - <facteur>
@@ -240,7 +241,6 @@ void Interpreteur::procedureDefinition() {
     }
     try{
         try{
-            cout << m_lecteur.getSymbole() << endl;
             tester("<VARIABLE>");
         }catch(SyntaxeException & se){
             tester("principale");

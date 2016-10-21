@@ -16,18 +16,19 @@ using namespace std;
 
 class Type {
 public:
-    Type();
-    virtual ~Type();
-    virtual inline Type & operator +(const Type & e0) const = 0 ;
-    virtual inline Type & operator -(const Type & e0) const = 0 ;
-    virtual inline Type & operator *(const Type & e0) const = 0 ;
-    virtual inline Type & operator /(const Type & e0) const = 0 ;
-    virtual inline bool operator <(const Type & e0) const = 0 ;
-    virtual inline bool operator >(const Type & e0) const = 0 ;
-    virtual inline bool operator <=(const Type & e0) const = 0 ;
-    virtual inline bool operator >=(const Type & e0) const = 0 ;
-    virtual inline bool operator ==(const Type & e0) const = 0 ;
-    virtual inline bool operator !=(const Type & e0) const = 0 ;
+    virtual Type & operator +(const Type & e0) const = 0 ;
+    virtual Type & operator -(const Type & e0) const = 0 ;
+    virtual Type & operator *(const Type & e0) const = 0 ;
+    virtual Type & operator /(const Type & e0) const = 0 ;
+    virtual bool operator <(const Type & e0) const = 0 ;
+    virtual bool operator >(const Type & e0) const = 0 ;
+    virtual bool operator <=(const Type & e0) const = 0 ;
+    virtual bool operator >=(const Type & e0) const = 0 ;
+    virtual bool operator ==(const Type & e0) const = 0 ;
+    virtual bool operator !=(const Type & e0) const = 0 ;
+    virtual bool operator &&(const Type & e0) const = 0 ;
+    virtual bool operator ||(const Type & e0) const = 0 ;
+    virtual bool operator !() const = 0 ;
 private:
 
 };
@@ -35,7 +36,6 @@ private:
 class Entier : public Type {
 public:
     Entier( int i );
-    virtual ~Entier();
     inline int getValue() const { return this->m_entier; }
     
     inline Type & operator +(const Type & e0) const { try{this->getValue() + dynamic_cast<const Entier*>(&e0)->getValue();}catch(exception e){throw ExecutionException();} }
@@ -48,6 +48,9 @@ public:
     inline bool operator >=(const Type & e0) const { try{this->getValue() >= dynamic_cast<const Entier*>(&e0)->getValue();}catch(exception e){throw ExecutionException();} }
     inline bool operator ==(const Type & e0) const { try{this->getValue() == dynamic_cast<const Entier*>(&e0)->getValue();}catch(exception e){throw ExecutionException();} }
     inline bool operator !=(const Type & e0) const { try{this->getValue() != dynamic_cast<const Entier*>(&e0)->getValue();}catch(exception e){throw ExecutionException();} }
+    inline bool operator &&(const Type & e0) const { try{this->getValue() && dynamic_cast<const Entier*>(&e0)->getValue();}catch(exception e){throw ExecutionException();} }
+    inline bool operator ||(const Type & e0) const { try{this->getValue() || dynamic_cast<const Entier*>(&e0)->getValue();}catch(exception e){throw ExecutionException();} }
+    inline bool operator !() const { try{!this->getValue();}catch(exception e){throw ExecutionException();} }
 private:
     int m_entier;
 };
@@ -56,7 +59,6 @@ private:
 class Chaine : public Type {
 public:
     Chaine(string s);
-    virtual ~Chaine();
     inline string getValue() const { return this->m_chaine; }
     inline Type & operator +(const Type & e0) const { try{this->getValue() + dynamic_cast<const Chaine*>(&e0)->getValue();}catch(exception e){throw ExecutionException();} }
     inline bool operator <(const Type & e0) const { try{this->getValue() < dynamic_cast<const Chaine*>(&e0)->getValue();}catch(exception e){throw ExecutionException();} }
@@ -65,6 +67,9 @@ public:
     inline bool operator >=(const Type & e0) const { try{this->getValue() >= dynamic_cast<const Chaine*>(&e0)->getValue();}catch(exception e){throw ExecutionException();} }
     inline bool operator ==(const Type & e0) const { try{this->getValue() == dynamic_cast<const Chaine*>(&e0)->getValue();}catch(exception e){throw ExecutionException();} }
     inline bool operator !=(const Type & e0) const { try{this->getValue() != dynamic_cast<const Chaine*>(&e0)->getValue();}catch(exception e){throw ExecutionException();} }
+    inline bool operator &&(const Type & e0) const { throw ExecutionException(); }
+    inline bool operator ||(const Type & e0) const { throw ExecutionException(); }
+    inline bool operator !() const { throw ExecutionException(); }
     inline Type & operator -(const Type & e0) const { throw ExecutionException(); }
     inline Type & operator *(const Type & e0) const { throw ExecutionException(); }
     inline Type & operator /(const Type & e0) const { throw ExecutionException(); }

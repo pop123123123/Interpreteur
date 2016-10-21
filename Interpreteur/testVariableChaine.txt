@@ -1,0 +1,11 @@
+# Fichier de test des variables chaine
+# Les lignes de commentaires commencent par #
+procedure principale()
+  a = 5;
+  ecrire("salut");
+  pour (i = 0 ; i < 5 ; i = i + 1)
+    a = a + a;
+  finpour
+  ecrire(a);
+finproc
+# Commentaire Final
